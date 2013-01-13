@@ -29,7 +29,7 @@ var ad = vast.attachAd({
 }());
 
 (function(){
-  creative = ad.attachLinearCreative({
+  var creative = ad.attachLinearCreative({
       AdParameters : '<xml></xml>'
     , Duration : '00:00:30'
   });
@@ -38,23 +38,14 @@ var ad = vast.attachAd({
   assert.throws(function(){ ad.attachLinearCreative() }, 'It should throw an error if no Duration is used');
   creative.attachMediaFile('http://domain.com/file.ext');
   assert.equal(creative.mediaFiles[0].url, 'http://domain.com/file.ext', 'It should set a media file URL');
-}());
-
-(function(){
   creative.attachTrackingEvent('creativeView', 'http://creativeview.com');
   assert.equal(creative.trackingEvents[0].url, 'http://creativeview.com', 'It should define tracking event URLs');
   assert.equal(creative.trackingEvents[0].type, 'creativeView', 'It should define tracking event types');
   assert.throws(function(){ creative.attachTrackingEvent('zingZang', 'http://zing-zang.com') }, 'It should throw an error if an incorrect TrackingEvent `type` is used');  
-}());
-
-(function(){
   creative.attachVideoClick('ClickThrough', 'http://click-through.com');
   assert.equal(creative.videoClicks[0].url, 'http://click-through.com', 'It should define video click URLs');
   assert.equal(creative.videoClicks[0].type, 'ClickThrough', 'It should define video click types');
   assert.throws(function(){ creative.attachVideoClick('zingZang', 'http://zing-zang.com') }, 'It should throw an error if an incorrect VideoClick `type` is used');  
-}());
-
-(function(){
   companionAd = creative.attachCompanionAd('StaticResource', {
       width : 300
     , height : 250
