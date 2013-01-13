@@ -3,7 +3,6 @@ A Node module for creating real-time VAST XML responses.
 
 Installation
 ---
-_Pending._
 ```
 npm install vast-xml
 ```
@@ -11,7 +10,7 @@ npm install vast-xml
 Create a VAST object:
 ---
 ```javascript
-var vast = require('vast');
+var VAST = require('vast');
 
 var vast = new VAST();
 var ad = vast.attachAd({ 
