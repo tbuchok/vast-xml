@@ -10,6 +10,10 @@
   "scripts": {
     "test": "node spec/index.spec.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nodejitsu/http-server.git"
+  },
   "keywords": [
     "VAST",
     "IAB",
