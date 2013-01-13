@@ -86,3 +86,9 @@ vast.xml({ pretty : true, indent : '  ', newline : '\n' });
 </VAST>
 */
 ```
+
+Testing
+---
+A work in progress using Node's built-in `assert` module. 
+
+The IAB's VAST specification is, well, vast -- further automated tests are needed to ensure module aligns with the VAST 3.0 specification.
