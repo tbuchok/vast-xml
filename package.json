@@ -1,0 +1,21 @@
+{
+  "name": "VAST-XML",
+  "version": "0.0.0",
+  "description": "VAST XML responses for online video advertisers.",
+  "main": "index.js",
+  "dependencies": {
+    "xmlbuilder": "~0.4.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node spec/index.spec.js"
+  },
+  "keywords": [
+    "VAST",
+    "IAB",
+    "in-stream",
+    "advertising"
+  ],
+  "author": "Tom Buchok",
+  "license": "MIT"
+}
