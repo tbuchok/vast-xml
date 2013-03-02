@@ -1,28 +1,29 @@
 # vast-xml
-A Node module for creating real-time VAST XML responses.
 
-Installation
----
+![Travis build status](https://api.travis-ci.org/tbuchok/vast-xml.png)
+
 ```
 npm install vast-xml
 ```
 
-Create a VAST object:
----
+## Create a VAST object:
+
 ```javascript
-var VAST = require('vast');
+var vast = require('vast');
 
 var vast = new VAST();
 var ad = vast.attachAd({ 
-    id : 1
-  , sequence : 99
-  , AdTitle : 'Common name of the ad'
-  , AdSystem : { name: 'Test Ad Server', version : '1.0' }
-});
+      id : 1
+    , structure : 'inline'
+    , sequence : 99
+    , AdTitle : 'Common name of the ad'
+    , AdSystem : { name: 'Test Ad Server', version : '1.0' }
+    , Impression : { id : 23, url : 'http://impression.com' }
+  });
 ```
 
-Attach Creatives
----
+## Attach creatives
+
 ```javascript
 var creative = ad.attachLinearCreative({
     AdParameters : '<xml></xml>'
@@ -33,8 +34,8 @@ creative.attachTrackingEvent('creativeView', 'http://creativeview.com');
 creative.attachVideoClick('ClickThrough', 'http://click-through.com');
 ```
 
-Attach Companion Ads
----
+## Attach companion ads
+
 ```javascript
 companionAd = creative.attachCompanionAd('StaticResource', {
     width : 300
@@ -45,11 +46,13 @@ companionAd = creative.attachCompanionAd('StaticResource', {
 companionAd.attachTrackingEvent('creativeView', 'http://companionad.com/creativeView');
 ```
 
-Generate the XML response
----
+## Generate XML
+
 ```javascript
 vast.xml({ pretty : true, indent : '  ', newline : '\n' });
-/*
+```
+
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <VAST version="3.0">
   <Ad id="1" sequence="99">
@@ -58,36 +61,57 @@ vast.xml({ pretty : true, indent : '  ', newline : '\n' });
       <AdTitle>Common name of the ad</AdTitle>
       <Description/>
       <Survey/>
-      <Impression id="sample-server">http://impression.com</Impression>
+      <Impression id="23">http://impression.com</Impression>
+      <Impression id="sample-server">http://sample-impression.com</Impression>
       <Creatives>
         <Creative>
-          <TrackingEvents>
-            <TrackingEvent type="creativeView">http://creativeview.com</TrackingEvent>
-          </TrackingEvents>
-          <VideoClicks>
-            <ClickThrough id="">http://click-through.com</ClickThrough>
-          </VideoClicks>
-          <MediaFiles>
-            <MediaFile id="" delivery="progressive" type="video/mp4" bitrate="320" minBitrate="" maxBitrate="" width="640" height="360" scalable="true" maintainAspectRatio="true" codec="" apiFramework="">http://domain.com/file.ext</MediaFile>
-          </MediaFiles>
+          <Linear>
+            <Duration>00:00:00</Duration>
+            <TrackingEvents>
+              <Tracking event="creativeView">http://creativeview.com</Tracking>
+            </TrackingEvents>
+            <VideoClicks>
+              <ClickThrough id="">http://click-through.com</ClickThrough>
+            </VideoClicks>
+            <MediaFiles>
+              <MediaFile id="" delivery="progressive" type="video/mp4" bitrate="320" minBitrate="320" maxBitrate="320" width="640" height="360" scalable="true" maintainAspectRatio="true" codec="" apiFramework="">http://domain.com/file.ext</MediaFile>
+            </MediaFiles>
+          </Linear>
+        </Creative>
+        <Creative>
           <CompanionAds>
-            <CompanionAd width="300" height="250">
-              <StaticResource type="image/jpeg">http://companionad.com/image.jpg</StaticResource>
+            <Companion width="300" height="250">
+              <StaticResource creativeType="image/jpeg">http://companionad.com/image.jpg</StaticResource>
               <TrackingEvents>
-                <TrackingEvent type="creativeView">http://companionad.com/creativeView</TrackingEvent>
+                <Tracking event="creativeView">http://companionad.com/creativeView</Tracking>
               </TrackingEvents>
-            </CompanionAd>
+            </Companion>
           </CompanionAds>
         </Creative>
       </Creatives>
     </InLine>
   </Ad>
 </VAST>
-*/
 ```
 
-Testing
----
-A work in progress using Node's built-in `assert` module. 
+## Validating
 
-The IAB's VAST specification is, well, vast -- further automated tests are needed to ensure module aligns with the VAST 3.0 specification.
+`npm test` validates the test builds. The validation is done against the VAST .xsd file, [made available by the IAB](http://www.iab.net/vast).
+
+Currently included in the test suite are: 
+
+1. linear ad with a companion ad
+1. wrapper ad
+1. _More pending..._
+
+The VAST spec is, well vast, and contains a lot of different corner cases. 
+
+**Pull requests, feedback and collaboration in fully rounding-out this module is more than welcome.**
+
+## Misc
+
+`xmllint` is a good tool for validating XML. As a helper, this repo contains the VAST .xsd and to validate a VAST file, follow:
+
+```bash
+$ xmllint --noout --schema ./test/files/vast3_draft.xsd /path/to/the/vast.xml
+```

@@ -6,8 +6,14 @@ var xml = function(options) {
   response.att('version', this.version);
   this.ads.forEach(function(ad){
     var Ad = response.element('Ad', { id : ad.id, sequence : ad.sequence });
-    if (ad.Wrapper) { 
-      Ad.element('Wrapper', ad.Wrapper); 
+    if (ad.structure.toLowerCase() === 'wrapper') { 
+      var wrapper = Ad.element('Wrapper');
+      wrapper.element('AdSystem', ad.AdSystem);
+      wrapper.element('VASTAdTagURI', ad.VASTAdTagURI);
+      ad.impressions.forEach(function(impression) {
+        wrapper.element('Impression', impression.url);
+      });
+      wrapper.element('Creatives');
     } else {
       var inline = Ad.element('InLine');
       inline.element('AdSystem', ad.AdSystem.name, { version : ad.AdSystem.version });
@@ -19,24 +25,26 @@ var xml = function(options) {
       });
       var creatives = inline.element('Creatives');
       ad.creatives.forEach(function(c){
-        var creative = creatives.element('Creative');
-        var trackingEvents = creative.element('TrackingEvents');
+        var creative = creatives.element('Creative')
+        var creativeType = creative.element(c.type);
+        creativeType.element('Duration', '00:00:00');
+        var trackingEvents = creativeType.element('TrackingEvents');
         c.trackingEvents.forEach(function(trackingEvent){
-          trackingEvents.element('TrackingEvent', trackingEvent.url, { type : trackingEvent.type });
+          trackingEvents.element('Tracking', trackingEvent.url, { event : trackingEvent.event });
         });
-        var videoClicks = creative.element('VideoClicks');
+        var videoClicks = creativeType.element('VideoClicks');
         c.videoClicks.forEach(function(videoClick){
           videoClicks.element(videoClick.type, videoClick.url, { id : videoClick.id });
         });
-        var mediaFiles = creative.element('MediaFiles');
+        var mediaFiles = creativeType.element('MediaFiles');
         c.mediaFiles.forEach(function(mediaFile){
           mediaFiles.element('MediaFile', mediaFile.url, {
               id : mediaFile.id
             , delivery : mediaFile.delivery
             , type : mediaFile.type
-            , bitrate : mediaFile.bitrate
-            , minBitrate : mediaFile.minBitrate
-            , maxBitrate : mediaFile.maxBitrate
+            , bitrate : mediaFile.bitrate || '320'
+            , minBitrate : mediaFile.minBitrate || '320'
+            , maxBitrate : mediaFile.maxBitrate || '320'
             , width : mediaFile.width
             , height : mediaFile.height
             , scalable : mediaFile.scalable
@@ -45,13 +53,13 @@ var xml = function(options) {
             , apiFramework : mediaFile.apiFramework
           });
         });
-        var companionAds = creative.element('CompanionAds');
+        var companionAds = creatives.element('Creative').element('CompanionAds');
         c.companionAds.forEach(function(companionAd){
-          companionAdElement = companionAds.element('CompanionAd', { width : companionAd.width, height : companionAd.height });
-          companionAdElement.element(companionAd.resource, companionAd.url, { type: companionAd.type } );
+          companionAdElement = companionAds.element('Companion', { width : companionAd.width, height : companionAd.height });
+          companionAdElement.element(companionAd.resource, companionAd.url, { creativeType: companionAd.type } );
           var trackingEvents = companionAdElement.element('TrackingEvents');
           companionAd.trackingEvents.forEach(function(trackingEvent){
-            trackingEvents.element('TrackingEvent', trackingEvent.url, { type : trackingEvent.type });
+            trackingEvents.element('Tracking', trackingEvent.url, { event : trackingEvent.event });
           });
         });
       });
