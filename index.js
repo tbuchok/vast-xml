@@ -33,7 +33,7 @@ var xml = function(options) {
         c.trackingEvents.forEach(function(trackingEvent){
           if (track) trackingEvents.element('Tracking', trackingEvent.url, { event : trackingEvent.event });
         });
-        creativeType.element('AdParameters').cdata(c.AdParameters);
+        if (c.AdParameters) creativeType.element('AdParameters').cdata(c.AdParameters);
         var videoClicks = creativeType.element('VideoClicks');
         c.videoClicks.forEach(function(videoClick){
           videoClicks.element(videoClick.type, videoClick.url, { id : videoClick.id });
