@@ -7,14 +7,6 @@ test('Validate ad settings', function(t){
    vast.attachAd({ 
          structure : 'inline'
        , AdSystem : 'Common name of the ad'
-       , AdTitle : 'the title'
-     });
-  }, 'It should throw an error if  no Impression or Error is set');
-  t.throws(function(){
-   vast.attachAd({ 
-         structure : 'inline'
-       , AdSystem : 'Common name of the ad'
-       , Impression : ''
      });
   }, 'It should throw an error if no AdTitle is set');
   t.throws(function(){
@@ -28,13 +20,12 @@ test('Validate ad settings', function(t){
 });
 
 var ad = vast.attachAd({ 
-      id : 1
-    , structure : 'inline'
-    , sequence : 99
-    , AdTitle : 'Common name of the ad'
-    , AdSystem : { name: 'Test Ad Server', version : '1.0' }
-    , Impression : { id : 23, url : 'http://impression.com' }
-  });
+    id : 1
+  , structure : 'inline'
+  , sequence : 99
+  , AdTitle : 'Common name of the ad'
+  , AdSystem : { name: 'Test Ad Server', version : '1.0' }
+}).attachImpression({ id : 23, url : 'http://impression.com' });
 
 test('`VAST` object', function(t){
   t.ok(vast, 'It should construct VAST responses');
@@ -55,8 +46,15 @@ test('object settings', function(t) {
 });
 
 test('attach impression', function(t){
-  ad.addImpression('sample-server', 'http://sample-impression.com');
+  ad.attachImpression({ id: 'sample-server', url : 'http://sample-impression.com' });
   t.equal(ad.impressions[ad.impressions.length - 1].url, 'http://sample-impression.com', 'It should set `Impression`');
+  t.end();
+});
+
+test('attach survey', function(t){
+  t.ok(ad.attachSurvey, 'It defines #attachSurvey');
+  ad.attachSurvey({ url : 'http://survey.com' });
+  t.equal(ad.surveys[0].url, 'http://survey.com', 'It should set surveys');
   t.end();
 });
 
@@ -67,7 +65,7 @@ test('attach creatives and events', function(t){
       AdParameters : '<xml></xml>'
     , Duration : '00:00:30'
   })
-  .attachMediaFile('http://domain.com/file.ext')
+  .attachMediaFile({ url : 'http://domain.com/file.ext' })
   .attachTrackingEvent('creativeView', 'http://creativeview.com')
   .attachVideoClick('ClickThrough', 'http://click-through.com');
 

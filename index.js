@@ -20,7 +20,11 @@ var xml = function(options) {
       inline.element('AdSystem', ad.AdSystem.name, { version : ad.AdSystem.version });
       inline.element('AdTitle', ad.AdTitle);
       inline.element('Description', ad.Description);
-      inline.element('Survey', ad.Survey);
+      ad.surveys.forEach(function(survey) {
+        var attributes = {}
+        if (survey.type) attributes.type = survey.type
+        inline.element('Survey', survey.url, attributes);
+      });
       ad.impressions.forEach(function(impression){
         if (track) inline.element('Impression', { id : impression.id }).cdata(impression.url);
       });
@@ -39,21 +43,21 @@ var xml = function(options) {
           videoClicks.element(videoClick.type, videoClick.url, { id : videoClick.id });
         });
         var mediaFiles = creativeType.element('MediaFiles');
-        c.mediaFiles.forEach(function(mediaFile){
-          mediaFiles.element('MediaFile', mediaFile.url, {
-              id : mediaFile.id
-            , delivery : mediaFile.delivery
-            , type : mediaFile.type
-            , bitrate : mediaFile.bitrate || '320'
-            , minBitrate : mediaFile.minBitrate || '320'
-            , maxBitrate : mediaFile.maxBitrate || '320'
-            , width : mediaFile.width
-            , height : mediaFile.height
-            , scalable : mediaFile.scalable
-            , maintainAspectRatio : mediaFile.maintainAspectRatio
-            , codec : mediaFile.codec
-            , apiFramework : mediaFile.apiFramework
-          });
+        c.mediaFiles.forEach(function(mediaFile) {
+          attributes = {};
+          attributes.delivery = mediaFile.delivery
+          attributes.type = mediaFile.type
+          attributes.width = mediaFile.width
+          attributes.height = mediaFile.height
+          if (mediaFile.id) attributes.id = mediaFile.id
+          if (mediaFile.bitrate) attributes.bitrate = mediaFile.bitrate
+          if (mediaFile.minBitrate) attributes.minBitrate = mediaFile.minBitrate
+          if (mediaFile.maxBitrate) attributes.maxBitrate = mediaFile.maxBitrate
+          if (mediaFile.scalable) attributes.scalable = mediaFile.scalable
+          if (mediaFile.maintainAspectRatio) attributes.maintainAspectRatio = mediaFile.maintainAspectRatio
+          if (mediaFile.codec) attributes.codec = mediaFile.codec
+          if (mediaFile.apiFramework) attributes.apiFramework = mediaFile.apiFramework
+          mediaFiles.element('MediaFile', mediaFile.url, attributes);
         });
         if (c.companionAds.length > 0) {
           var companionAds = creatives.element('Creative').element('CompanionAds');

@@ -8,15 +8,6 @@ test('Validate ad settings', function(t){
          structure : 'wrapper'
        , AdSystem : 'Common name of the ad'
        , sequence : 23
-       , VASTAdTagURI : 'http://example.com'
-     });
-  }, 'It should throw an error if  no Impression or Error is set');
-  t.throws(function(){
-   vast.attachAd({ 
-         structure : 'wrapper'
-       , AdSystem : 'Common name of the ad'
-       , sequence : 23
-       , Impression : ''
      });
   }, 'It should throw an error if no VASTAdTagURI is set');
   t.throws(function(){
@@ -31,11 +22,10 @@ test('Validate ad settings', function(t){
 });
 
 vast.attachAd({ 
-      structure : 'wrapper'
-    , AdSystem : 'Common name of the ad'
-    , sequence : 23
-    , VASTAdTagURI : 'http://example.com'
-    , Impression : 'http://impression.com'
-  });
+    structure : 'wrapper'
+  , AdSystem : 'Common name of the ad'
+  , sequence : 23
+  , VASTAdTagURI : 'http://example.com'
+}).attachImpression({ id: Date.now(), url : 'http://impression.com' });
 
 module.exports = vast;
