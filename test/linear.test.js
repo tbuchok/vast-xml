@@ -58,34 +58,35 @@ test('attach impression', function(t){
   ad.addImpression('sample-server', 'http://sample-impression.com');
   t.equal(ad.impressions[ad.impressions.length - 1].url, 'http://sample-impression.com', 'It should set `Impression`');
   t.end();
-})
+});
 
 test('attach creatives and events', function(t){
   t.ok(ad.creatives, 'It should have a `creatives` array');
+
   var creative = ad.attachLinearCreative({
       AdParameters : '<xml></xml>'
     , Duration : '00:00:30'
-  });
+  })
+  .attachMediaFile('http://domain.com/file.ext')
+  .attachTrackingEvent('creativeView', 'http://creativeview.com')
+  .attachVideoClick('ClickThrough', 'http://click-through.com');
+
   t.ok(creative, 'It should return creative when attaching a Linear creative');
   t.equal(creative.Duration, '00:00:30', 'It should set a duration');
   t.throws(function(){ ad.attachLinearCreative() }, 'It should throw an error if no Duration is used');
-  creative.attachMediaFile('http://domain.com/file.ext');
   t.equal(creative.mediaFiles[0].url, 'http://domain.com/file.ext', 'It should set a media file URL');
-  creative.attachTrackingEvent('creativeView', 'http://creativeview.com');
   t.equal(creative.trackingEvents[0].url, 'http://creativeview.com', 'It should define tracking event URLs');
   t.equal(creative.trackingEvents[0].event, 'creativeView', 'It should define tracking event types');
   t.throws(function(){ creative.attachTrackingEvent('zingZang', 'http://zing-zang.com') }, 'It should throw an error if an incorrect TrackingEvent `type` is used');  
-  creative.attachVideoClick('ClickThrough', 'http://click-through.com');
   t.equal(creative.videoClicks[0].url, 'http://click-through.com', 'It should define video click URLs');
   t.equal(creative.videoClicks[0].type, 'ClickThrough', 'It should define video click types');
   t.throws(function(){ creative.attachVideoClick('zingZang', 'http://zing-zang.com') }, 'It should throw an error if an incorrect VideoClick `type` is used');  
-  companionAd = creative.attachCompanionAd('StaticResource', {
+  creative.attachCompanionAd('StaticResource', {
       width : 300
     , height : 250
     , type : 'image/jpeg'
     , url : 'http://companionad.com/image.jpg'
-  });
-  companionAd.attachTrackingEvent('creativeView', 'http://companionad.com/creativeView');
+  }).attachTrackingEvent('creativeView', 'http://companionad.com/creativeView');
   t.end();
 });
 
