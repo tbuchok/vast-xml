@@ -18,9 +18,20 @@ var ad = vast.attachAd({
     , sequence : 99
     , AdTitle : 'Common name of the ad'
     , AdSystem : { name: 'Test Ad Server', version : '1.0' }
-    , Impression : { id : 23, url : 'http://impression.com' }
   });
 ```
+
+## Attach Impression tracking URLs
+
+```javascript
+ad.attachImpression({
+      id: 23
+    , url: "http://impression.com"
+  });
+ad.attachImpression({
+      id: "sample-server"
+    , url: "http://sample-impression.com"
+  });
 
 ## Attach creatives
 
