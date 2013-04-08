@@ -25,7 +25,7 @@ var ad = vast.attachAd({
 
 ```javascript
 ad.attachImpression({
-      id: 23
+      id: "23"
     , url: "http://impression.com"
   });
 ad.attachImpression({
