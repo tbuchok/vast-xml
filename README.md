@@ -32,6 +32,7 @@ ad.attachImpression({
       id: "sample-server"
     , url: "http://sample-impression.com"
   });
+```
 
 ## Attach creatives
 
