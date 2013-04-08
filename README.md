@@ -31,16 +31,16 @@ var creative = ad.attachLinearCreative({
 });
 creative.attachMediaFile({
     url: 'http://domain.com/file.ext'
-    , type: "video/mp4'
-    , bitrate: "320"
-    , minbitrate: "320"
-    , maxbitrate: "320"
-    , width: "640"
-    , height: "360"
-    , scalable: "true"
-    , maintainAspectRatio: "true"
-    , codec: ""
-    , apiFramework: ""
+  , type: "video/mp4'
+  , bitrate: "320"
+  , minBitrate: "320"
+  , maxBitrate: "320"
+  , width: "640"
+  , height: "360"
+  , scalable: "true"
+  , maintainAspectRatio: "true"
+  , codec: ""
+  , apiFramework: ""
   });
 creative.attachTrackingEvent('creativeView', 'http://creativeview.com');
 creative.attachVideoClick('ClickThrough', 'http://click-through.com');
