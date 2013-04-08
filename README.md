@@ -18,7 +18,19 @@ var ad = vast.attachAd({
     , sequence : 99
     , AdTitle : 'Common name of the ad'
     , AdSystem : { name: 'Test Ad Server', version : '1.0' }
-    , Impression : { id : 23, url : 'http://impression.com' }
+  });
+```
+
+## Attach Impression tracking URLs
+
+```javascript
+ad.attachImpression({
+      id: "23"
+    , url: "http://impression.com"
+  });
+ad.attachImpression({
+      id: "sample-server"
+    , url: "http://sample-impression.com"
   });
 ```
 
@@ -29,7 +41,19 @@ var creative = ad.attachLinearCreative({
     AdParameters : '<xml></xml>'
   , Duration : '00:00:30'
 });
-creative.attachMediaFile('http://domain.com/file.ext');
+creative.attachMediaFile({
+    url: 'http://domain.com/file.ext'
+  , type: "video/mp4'
+  , bitrate: "320"
+  , minBitrate: "320"
+  , maxBitrate: "320"
+  , width: "640"
+  , height: "360"
+  , scalable: "true"
+  , maintainAspectRatio: "true"
+  , codec: ""
+  , apiFramework: ""
+  });
 creative.attachTrackingEvent('creativeView', 'http://creativeview.com');
 creative.attachVideoClick('ClickThrough', 'http://click-through.com');
 ```
