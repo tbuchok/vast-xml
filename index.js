@@ -5,8 +5,13 @@ var xml = function(options) {
   var track = (options.track === undefined) ? true : options.track;
   var response = builder.create('VAST', { version : '1.0', encoding : 'UTF-8' });
   response.att('version', this.version);
+  var version3 = this.version.slice(0,1)==="3" ? true : false;
   this.ads.forEach(function(ad){
-    var Ad = response.element('Ad', { id : ad.id, sequence : ad.sequence });
+    if(version3) {
+      var Ad = response.element('Ad', { id : ad.id, sequence : ad.sequence });
+    } else {
+      var Ad = response.element('Ad', { id: ad.id });
+    }
     if (ad.structure.toLowerCase() === 'wrapper') { 
       var wrapper = Ad.element('Wrapper');
       wrapper.element('AdSystem', ad.AdSystem);
