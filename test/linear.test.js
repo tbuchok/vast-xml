@@ -45,6 +45,19 @@ test('object settings', function(t) {
   t.end();
 });
 
+test('vast 2.0 specific settings', function(t){
+  var vast20 = new VAST({ version : '2.0' });
+  var ad = vast20.attachAd({ 
+      id : 1
+    , structure : 'inline'
+    , AdTitle : 'Common name of the ad'
+    , AdSystem : { name: 'Test Ad Server', version : '1.0' }
+  }).attachImpression({ id : 23, url : 'http://impression.com' });
+  t.equal(vast20.version, '2.0', 'It should use version 2.0 if set');
+  t.notOk(ad.sequence, 'It does not have a sequence');
+  t.end();
+});
+
 test('attach impression', function(t){
   ad.attachImpression({ id: 'sample-server', url : 'http://sample-impression.com' });
   t.equal(ad.impressions[ad.impressions.length - 1].url, 'http://sample-impression.com', 'It should set `Impression`');

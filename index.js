@@ -6,6 +6,8 @@ var xml = function(options) {
   var response = builder.create('VAST', { version : '1.0', encoding : 'UTF-8' });
   response.att('version', this.version);
   this.ads.forEach(function(ad){
+    var adOptions = { id : ad.id }
+    if (ad.sequence) adOptions.sequence = ad.sequence;
     var Ad = response.element('Ad', { id : ad.id, sequence : ad.sequence });
     if (ad.structure.toLowerCase() === 'wrapper') { 
       var wrapper = Ad.element('Wrapper');
