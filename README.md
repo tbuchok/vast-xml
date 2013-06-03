@@ -34,10 +34,10 @@ ad.attachImpression({
   });
 ```
 
-## Attach creatives
+## Attach Linear creatives
 
 ```javascript
-var creative = ad.attachLinearCreative({
+var creative = ad.attachCreative('Linear', {
     AdParameters : '<xml></xml>'
   , Duration : '00:00:30'
 });
@@ -53,21 +53,38 @@ creative.attachMediaFile({
   , maintainAspectRatio: "true"
   , codec: ""
   , apiFramework: ""
-  });
+});
 creative.attachTrackingEvent('creativeView', 'http://creativeview.com');
 creative.attachVideoClick('ClickThrough', 'http://click-through.com');
 ```
 
-## Attach companion ads
+## Attach Non-Linear creatives
 
 ```javascript
-companionAd = creative.attachCompanionAd('StaticResource', {
+var creative = ad.attachCreative('NonLinear', {
+    id : 99
+  , width : 90
+  , height: 10
+  , expandedWidth : 90
+  , expandedHeight : 45
+  , scalable : false
+  , maintainAspectRatio : false
+  , minSuggestedDuration : '00:00:00'
+  , apiFramework : 'VPAID'
+});
+
+```
+
+## Attach Companion Ad creatives
+
+```javascript
+var creative = ad.attachCreative('CompanionAd', { 
     width : 300
   , height : 250
   , type : 'image/jpeg'
-  , url : 'http://companionad.com/image.jpg'
+  , url : 'http://companionad.com/image.jpg' 
 });
-companionAd.attachTrackingEvent('creativeView', 'http://companionad.com/creativeView');
+creative.attachTrackingEvent('creativeView', 'http://companionad.com/creativeView');
 ```
 
 ## Generate XML

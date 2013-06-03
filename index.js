@@ -31,23 +31,14 @@ var xml = function(options) {
         if (track) inline.element('Impression', { id : impression.id }).cdata(impression.url);
       });
       var creatives = inline.element('Creatives');
-      ad.creatives.forEach(function(c) {
+
+      var linearCreatives = ad.creatives.filter(function(c) { return c.type === 'Linear' });
+      var nonLinearCreatives = ad.creatives.filter(function(c) { return c.type === 'NonLinear' });
+      var companionAdCreatives = ad.creatives.filter(function(c) { return c.type === 'CompanionAd' });
+
+      linearCreatives.forEach(function(c) {
         var creative = creatives.element('Creative')
         var creativeType;
-        if (c.type === 'NonLinear') {
-          var nonLinearAds = creative.element('NonLinearAds');
-          var attributes = {};
-          creativeType = nonLinearAds.element(c.type, c.attributes);
-          c.resources.forEach(function(resource) { 
-            var attributes = {}
-            if (resource.creativeType) attributes.creativeType = resource.creativeType;
-            creativeType.element(resource.type, resource.uri, attributes);
-          });
-          c.clicks.forEach(function(click){
-            creativeType.element(click.type, click.uri);
-          });
-          if (c.adParameters) creativeType.element('AdParameters', c.adParameters.data, { xmlEncoded : c.adParameters.xmlEncoded })
-        } else {
           creativeType = creative.element(c.type);  
           creativeType.element('Duration', c.Duration);
           var trackingEvents = creativeType.element('TrackingEvents');
@@ -76,18 +67,29 @@ var xml = function(options) {
             if (mediaFile.apiFramework) attributes.apiFramework = mediaFile.apiFramework
             mediaFiles.element('MediaFile', mediaFile.url, attributes);
           });
-        }
-        if (c.companionAds.length > 0) {
-          var companionAds = creatives.element('Creative').element('CompanionAds');
-          c.companionAds.forEach(function(companionAd){
-            companionAdElement = companionAds.element('Companion', { width : companionAd.width, height : companionAd.height });
-            companionAdElement.element(companionAd.resource, companionAd.url, { creativeType: companionAd.type } );
-            var trackingEvents = companionAdElement.element('TrackingEvents');
-            companionAd.trackingEvents.forEach(function(trackingEvent){
-              if (track) trackingEvents.element('Tracking', trackingEvent.url, { event : trackingEvent.event });
-            });
-          });
-        }
+      });
+
+      nonLinearCreatives.forEach(function(c){
+        var nonLinearAds = creatives.element('Creative').element('NonLinearAds');
+        var attributes = {};
+        var creativeType = nonLinearAds.element(c.type, c.attributes);
+        c.resources.forEach(function(resource) { 
+          var attributes = {}
+          if (resource.creativeType) attributes.creativeType = resource.creativeType;
+          creativeType.element(resource.type, resource.uri, attributes);
+        });
+        c.clicks.forEach(function(click){
+          creativeType.element(click.type, click.uri);
+        });
+        if (c.adParameters) creativeType.element('AdParameters', c.adParameters.data, { xmlEncoded : c.adParameters.xmlEncoded });
+      });
+      if (companionAdCreatives.length > 0) var companionAds = creatives.element('Creative').element('CompanionAds');
+      companionAdCreatives.forEach(function(c) {
+        companion = companionAds.element('Companion', c.attributes);
+        c.resources.forEach(function(r) { 
+          companion.element(r.type, r.uri, (r.creativeType) ? { creativeType : r.creativeType } : {});
+          if (r.adParameters) companion.element('AdParameters', r.adParameters.data, { xmlEncoded : r.adParameters.xmlEncoded });
+        });
       });
     }
   });

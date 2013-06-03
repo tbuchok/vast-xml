@@ -5,7 +5,7 @@ var test = require('tap').test
 var ad = vast.attachAd({ id : 0, structure : 'inline', sequence : 1, AdTitle : 'Common name of the ad', AdSystem : { name : 'Foo', version : '1.0'} })
   .attachImpression({ id : 1, url : 'http://impression.com' });
 
-var nonLinear = ad.attachNonLinearCreative({
+var nonLinear = ad.attachCreative('NonLinear', {
     id : 99
   , width : 90
   , height: 10

@@ -74,7 +74,7 @@ test('attach survey', function(t){
 test('attach creatives and events', function(t){
   t.ok(ad.creatives, 'It should have a `creatives` array');
 
-  var creative = ad.attachLinearCreative({
+  var creative = ad.attachCreative('Linear', {
       AdParameters : '<xml></xml>'
     , Duration : '00:00:30'
   })
@@ -92,12 +92,9 @@ test('attach creatives and events', function(t){
   t.equal(creative.videoClicks[0].url, 'http://click-through.com', 'It should define video click URLs');
   t.equal(creative.videoClicks[0].type, 'ClickThrough', 'It should define video click types');
   t.throws(function(){ creative.attachVideoClick('zingZang', 'http://zing-zang.com') }, 'It should throw an error if an incorrect VideoClick `type` is used');  
-  creative.attachCompanionAd('StaticResource', {
-      width : 300
-    , height : 250
-    , type : 'image/jpeg'
-    , url : 'http://companionad.com/image.jpg'
-  }).attachTrackingEvent('creativeView', 'http://companionad.com/creativeView');
+  ad.attachCreative('CompanionAd', { width : 300, height : 250 })
+    .attachResource('StaticResource', 'http://companionad.com/image.jpg', 'image/jpeg')
+    .attachTrackingEvent('creativeView', 'http://companionad.com/creativeView');
   t.end();
 });
 
