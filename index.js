@@ -31,36 +31,52 @@ var xml = function(options) {
         if (track) inline.element('Impression', { id : impression.id }).cdata(impression.url);
       });
       var creatives = inline.element('Creatives');
-      ad.creatives.forEach(function(c){
+      ad.creatives.forEach(function(c) {
         var creative = creatives.element('Creative')
-        var creativeType = creative.element(c.type);
-        creativeType.element('Duration', c.Duration);
-        var trackingEvents = creativeType.element('TrackingEvents');
-        c.trackingEvents.forEach(function(trackingEvent){
-          if (track) trackingEvents.element('Tracking', trackingEvent.url, { event : trackingEvent.event });
-        });
-        if (c.AdParameters) creativeType.element('AdParameters').cdata(c.AdParameters);
-        var videoClicks = creativeType.element('VideoClicks');
-        c.videoClicks.forEach(function(videoClick){
-          videoClicks.element(videoClick.type, videoClick.url, { id : videoClick.id });
-        });
-        var mediaFiles = creativeType.element('MediaFiles');
-        c.mediaFiles.forEach(function(mediaFile) {
-          attributes = {};
-          attributes.delivery = mediaFile.delivery
-          attributes.type = mediaFile.type
-          attributes.width = mediaFile.width
-          attributes.height = mediaFile.height
-          if (mediaFile.id) attributes.id = mediaFile.id
-          if (mediaFile.bitrate) attributes.bitrate = mediaFile.bitrate
-          if (mediaFile.minBitrate) attributes.minBitrate = mediaFile.minBitrate
-          if (mediaFile.maxBitrate) attributes.maxBitrate = mediaFile.maxBitrate
-          if (mediaFile.scalable) attributes.scalable = mediaFile.scalable
-          if (mediaFile.maintainAspectRatio) attributes.maintainAspectRatio = mediaFile.maintainAspectRatio
-          if (mediaFile.codec) attributes.codec = mediaFile.codec
-          if (mediaFile.apiFramework) attributes.apiFramework = mediaFile.apiFramework
-          mediaFiles.element('MediaFile', mediaFile.url, attributes);
-        });
+        var creativeType;
+        if (c.type === 'NonLinear') {
+          var nonLinearAds = creative.element('NonLinearAds');
+          var attributes = {};
+          creativeType = nonLinearAds.element(c.type, c.attributes);
+          c.resources.forEach(function(resource) { 
+            var attributes = {}
+            if (resource.creativeType) attributes.creativeType = resource.creativeType;
+            creativeType.element(resource.type, resource.uri, attributes);
+          });
+          c.clicks.forEach(function(click){
+            creativeType.element(click.type, click.uri);
+          });
+          if (c.adParameters) creativeType.element('AdParameters', c.adParameters.data, { xmlEncoded : c.adParameters.xmlEncoded })
+        } else {
+          creativeType = creative.element(c.type);  
+          creativeType.element('Duration', c.Duration);
+          var trackingEvents = creativeType.element('TrackingEvents');
+          c.trackingEvents.forEach(function(trackingEvent){
+            if (track) trackingEvents.element('Tracking', trackingEvent.url, { event : trackingEvent.event });
+          });
+          if (c.AdParameters) creativeType.element('AdParameters').cdata(c.AdParameters);
+          var videoClicks = creativeType.element('VideoClicks');
+          c.videoClicks.forEach(function(videoClick){
+            videoClicks.element(videoClick.type, videoClick.url, { id : videoClick.id });
+          });
+          var mediaFiles = creativeType.element('MediaFiles');
+          c.mediaFiles.forEach(function(mediaFile) {
+            var attributes = {};
+            attributes.delivery = mediaFile.delivery
+            attributes.type = mediaFile.type
+            attributes.width = mediaFile.width
+            attributes.height = mediaFile.height
+            if (mediaFile.id) attributes.id = mediaFile.id
+            if (mediaFile.bitrate) attributes.bitrate = mediaFile.bitrate
+            if (mediaFile.minBitrate) attributes.minBitrate = mediaFile.minBitrate
+            if (mediaFile.maxBitrate) attributes.maxBitrate = mediaFile.maxBitrate
+            if (mediaFile.scalable) attributes.scalable = mediaFile.scalable
+            if (mediaFile.maintainAspectRatio) attributes.maintainAspectRatio = mediaFile.maintainAspectRatio
+            if (mediaFile.codec) attributes.codec = mediaFile.codec
+            if (mediaFile.apiFramework) attributes.apiFramework = mediaFile.apiFramework
+            mediaFiles.element('MediaFile', mediaFile.url, attributes);
+          });
+        }
         if (c.companionAds.length > 0) {
           var companionAds = creatives.element('Creative').element('CompanionAds');
           c.companionAds.forEach(function(companionAd){
