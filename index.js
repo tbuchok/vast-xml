@@ -39,7 +39,14 @@ var xml = function(options) {
       linearCreatives.forEach(function(c) {
         var creative = creatives.element('Creative')
         var creativeType;
-        creativeType = creative.element(c.type);  
+        creativeType = creative.element(c.type);
+        if (c.icons.length > 0) var icons = creativeType.element('Icons');
+        c.icons.forEach(function(i){
+          var icon = icons.element('Icon', i.attributes);
+          i.resources.forEach(function(r){
+            icon.element(r.type, r.uri, (r.creativeType) ? { creativeType : r.creativeType } : {});
+          });
+        });
         creativeType.element('Duration', c.Duration);
         var trackingEvents = creativeType.element('TrackingEvents');
         c.trackingEvents.forEach(function(trackingEvent){
