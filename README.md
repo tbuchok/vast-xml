@@ -41,9 +41,8 @@ var creative = ad.attachCreative('Linear', {
     AdParameters : '<xml></xml>'
   , Duration : '00:00:30'
 });
-creative.attachMediaFile({
-    url: 'http://domain.com/file.ext'
-  , type: "video/mp4'
+creative.attachMediaFile('http://domain.com/file.ext', {
+    type: "video/mp4'
   , bitrate: "320"
   , minBitrate: "320"
   , maxBitrate: "320"

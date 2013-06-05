@@ -78,7 +78,7 @@ test('attach creatives and events', function(t){
       AdParameters : '<xml></xml>'
     , Duration : '00:00:30'
   })
-  .attachMediaFile({ url : 'http://domain.com/file.ext' })
+  .attachMediaFile('http://domain.com/file.ext', {})
   .attachTrackingEvent('creativeView', 'http://creativeview.com')
   .attachVideoClick('ClickThrough', 'http://click-through.com');
 

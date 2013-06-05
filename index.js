@@ -39,39 +39,25 @@ var xml = function(options) {
       linearCreatives.forEach(function(c) {
         var creative = creatives.element('Creative')
         var creativeType;
-          creativeType = creative.element(c.type);  
-          creativeType.element('Duration', c.Duration);
-          var trackingEvents = creativeType.element('TrackingEvents');
-          c.trackingEvents.forEach(function(trackingEvent){
-            if (track) trackingEvents.element('Tracking', trackingEvent.url, { event : trackingEvent.event });
-          });
-          if (c.AdParameters) creativeType.element('AdParameters').cdata(c.AdParameters);
-          var videoClicks = creativeType.element('VideoClicks');
-          c.videoClicks.forEach(function(videoClick){
-            videoClicks.element(videoClick.type, videoClick.url, { id : videoClick.id });
-          });
-          var mediaFiles = creativeType.element('MediaFiles');
-          c.mediaFiles.forEach(function(mediaFile) {
-            var attributes = {};
-            attributes.delivery = mediaFile.delivery
-            attributes.type = mediaFile.type
-            attributes.width = mediaFile.width
-            attributes.height = mediaFile.height
-            if (mediaFile.id) attributes.id = mediaFile.id
-            if (mediaFile.bitrate) attributes.bitrate = mediaFile.bitrate
-            if (mediaFile.minBitrate) attributes.minBitrate = mediaFile.minBitrate
-            if (mediaFile.maxBitrate) attributes.maxBitrate = mediaFile.maxBitrate
-            if (mediaFile.scalable) attributes.scalable = mediaFile.scalable
-            if (mediaFile.maintainAspectRatio) attributes.maintainAspectRatio = mediaFile.maintainAspectRatio
-            if (mediaFile.codec) attributes.codec = mediaFile.codec
-            if (mediaFile.apiFramework) attributes.apiFramework = mediaFile.apiFramework
-            mediaFiles.element('MediaFile', mediaFile.url, attributes);
-          });
+        creativeType = creative.element(c.type);  
+        creativeType.element('Duration', c.Duration);
+        var trackingEvents = creativeType.element('TrackingEvents');
+        c.trackingEvents.forEach(function(trackingEvent){
+          if (track) trackingEvents.element('Tracking', trackingEvent.url, { event : trackingEvent.event });
+        });
+        if (c.AdParameters) creativeType.element('AdParameters').cdata(c.AdParameters);
+        var videoClicks = creativeType.element('VideoClicks');
+        c.videoClicks.forEach(function(videoClick){
+          videoClicks.element(videoClick.type, videoClick.url, { id : videoClick.id });
+        });
+        var mediaFiles = creativeType.element('MediaFiles');
+        c.mediaFiles.forEach(function(mediaFile) {
+          mediaFiles.element('MediaFile', mediaFile.url, mediaFile.attributes);
+        });
       });
 
       nonLinearCreatives.forEach(function(c){
         var nonLinearAds = creatives.element('Creative').element('NonLinearAds');
-        var attributes = {};
         var creativeType = nonLinearAds.element(c.type, c.attributes);
         c.resources.forEach(function(resource) { 
           var attributes = {}
