@@ -71,16 +71,16 @@ test('attach survey', function(t){
   t.end();
 });
 
+var creative = ad.attachCreative('Linear', {
+    AdParameters : '<xml></xml>'
+  , Duration : '00:00:30'
+})
+.attachMediaFile('http://domain.com/file.ext', {})
+.attachTrackingEvent('creativeView', 'http://creativeview.com')
+.attachVideoClick('ClickThrough', 'http://click-through.com');
+
 test('attach creatives and events', function(t){
   t.ok(ad.creatives, 'It should have a `creatives` array');
-
-  var creative = ad.attachCreative('Linear', {
-      AdParameters : '<xml></xml>'
-    , Duration : '00:00:30'
-  })
-  .attachMediaFile('http://domain.com/file.ext', {})
-  .attachTrackingEvent('creativeView', 'http://creativeview.com')
-  .attachVideoClick('ClickThrough', 'http://click-through.com');
 
   t.ok(creative, 'It should return creative when attaching a Linear creative');
   t.equal(creative.Duration, '00:00:30', 'It should set a duration');
@@ -95,6 +95,39 @@ test('attach creatives and events', function(t){
   ad.attachCreative('CompanionAd', { width : 300, height : 250 })
     .attachResource('StaticResource', 'http://companionad.com/image.jpg', 'image/jpeg')
     .attachTrackingEvent('creativeView', 'http://companionad.com/creativeView');
+  t.end();
+});
+
+test('attach icons and icon stuff', function(t){
+  t.ok(creative.attachIcon, 'it should have an attach icon method');
+  t.ok(creative.icons, 'it should have an icons array');
+  var icon = creative.attachIcon({ 
+      program : 'foo'
+    , height : 250
+    , width : 300
+    , xPosition : 'left'
+    , yPosition : 'top'
+    , apiFramework : 'VPAID'
+    , offset : '01:05:09'
+    , duration : '00:00:00'
+  });
+  t.equals(creative.icons[0].attributes.program, 'foo', 'It should set the appropriate program attributes');
+  t.equals(creative.icons[0].attributes.height, 250, 'It should set the appropriate height attributes');
+  t.equals(creative.icons[0].attributes.width, 300, 'It should set the appropriate width attributes');
+  t.equals(creative.icons[0].attributes.xPosition, 'left', 'It should set the appropriate xPosition attributes');
+  t.equals(creative.icons[0].attributes.yPosition, 'top', 'It should set the appropriate yPosition attributes');
+  t.equals(creative.icons[0].attributes.apiFramework, 'VPAID', 'It should set the appropriate apiFramework attributes');
+  t.equals(creative.icons[0].attributes.offset, '01:05:09', 'It should set the appropriate offset attributes');
+  t.equals(creative.icons[0].attributes.duration, '00:00:00', 'It should set the appropriate duration attributes');
+
+  icon.attachResource('StaticResource', 'http://domain.com/file.gif', 'image/gif');
+  // add another resource and watch validation fail!
+  t.equal(icon.resources[0].type, 'StaticResource', 'It should set a resource');
+  icon.attachClick('IconClickThrough', 'http://icon-click-through.com');
+  t.equal(icon.clicks[0].uri, 'http://icon-click-through.com', 'It should set icon clicks');
+  icon.attachTrackingEvent('IconViewTracking', 'http://icon-view-tracking.com');
+  t.equal(icon.trackingEvents[0].uri, 'http://icon-view-tracking.com', 'It should set icon clicks');
+
   t.end();
 });
 

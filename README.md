@@ -55,6 +55,14 @@ creative.attachMediaFile('http://domain.com/file.ext', {
 });
 creative.attachTrackingEvent('creativeView', 'http://creativeview.com');
 creative.attachVideoClick('ClickThrough', 'http://click-through.com');
+
+### Attach Icons to Linear creatives
+
+```javascript
+var icon = creative.attachIcon({foo : bar, baz : quk}) x
+icon.attachResource('StaticResource', 'http://domain.com/file.gif', 'image/gif');
+icon.attachClick('IconClickThrough', 'http://icon-click-through.com');
+icon.attachTrackingEvent('IconViewTracking', 'http://icon-view-tracking.com');
 ```
 
 ## Attach Non-Linear creatives
