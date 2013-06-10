@@ -149,9 +149,12 @@ vast.xml({ pretty : true, indent : '  ', newline : '\n' });
 
 Currently included in the test suite are: 
 
-1. linear ad with a companion ad
+1. linear ad 
+  * with companion
+  * with icon
+1. non-linear ad
+  * with companion
 1. wrapper ad
-1. _More pending..._
 
 The VAST spec is, well vast, and contains a lot of different corner cases. 
 
