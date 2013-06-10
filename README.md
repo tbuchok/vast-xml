@@ -60,7 +60,16 @@ creative.attachVideoClick('ClickThrough', 'http://click-through.com');
 ### Attach Icons to Linear creatives
 
 ```javascript
-var icon = creative.attachIcon({foo : bar, baz : quk}) x
+var icon = creative.attachIcon({ 
+    program : 'foo'
+  , height : 250
+  , width : 300
+  , xPosition : 'left'
+  , yPosition : 'top'
+  , apiFramework : 'VPAID'
+  , offset : '01:05:09'
+  , duration : '00:00:00'
+});
 icon.attachResource('StaticResource', 'http://domain.com/file.gif', 'image/gif');
 icon.attachClick('IconClickThrough', 'http://icon-click-through.com');
 icon.attachTrackingEvent('IconViewTracking', 'http://icon-view-tracking.com');
@@ -80,7 +89,6 @@ var creative = ad.attachCreative('NonLinear', {
   , minSuggestedDuration : '00:00:00'
   , apiFramework : 'VPAID'
 });
-
 ```
 
 ## Attach Companion Ad creatives
