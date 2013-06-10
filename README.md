@@ -51,10 +51,11 @@ creative.attachMediaFile('http://domain.com/file.ext', {
   , scalable: "true"
   , maintainAspectRatio: "true"
   , codec: ""
-  , apiFramework: ""
+  , apiFramework: "VPAID"
 });
 creative.attachTrackingEvent('creativeView', 'http://creativeview.com');
 creative.attachVideoClick('ClickThrough', 'http://click-through.com');
+```
 
 ### Attach Icons to Linear creatives
 
