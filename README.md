@@ -9,7 +9,7 @@ npm install vast-xml
 ## Create a VAST object:
 
 ```javascript
-var vast = require('vast');
+var VAST = require('vast-xml');
 
 var vast = new VAST();
 var ad = vast.attachAd({ 
