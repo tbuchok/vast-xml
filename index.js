@@ -11,7 +11,7 @@ var xml = function(options) {
     var Ad = response.element('Ad', { id : ad.id, sequence : ad.sequence });
     if (ad.structure.toLowerCase() === 'wrapper') { 
       var wrapper = Ad.element('Wrapper');
-      wrapper.element('AdSystem', ad.AdSystem);
+      wrapper.element('AdSystem', ad.AdSystem.name, { version : ad.AdSystem.version });
       wrapper.element('VASTAdTagURI', ad.VASTAdTagURI);
       ad.impressions.forEach(function(impression) {
         if (track) wrapper.element('Impression').cdata(impression.url);
