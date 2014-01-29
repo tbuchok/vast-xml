@@ -75,7 +75,7 @@ var creative = ad.attachCreative('Linear', {
     AdParameters : '<xml></xml>'
   , Duration : '00:00:30'
 })
-.attachMediaFile('http://domain.com/file.ext', {})
+.attachMediaFile('http://domain.com/file.ext', { id: Date.now() })
 .attachTrackingEvent('creativeView', 'http://creativeview.com')
 .attachVideoClick('ClickThrough', 'http://click-through.com');
 
@@ -95,6 +95,23 @@ test('attach creatives and events', function(t){
   ad.attachCreative('CompanionAd', { width : 300, height : 250 })
     .attachResource('StaticResource', 'http://companionad.com/image.jpg', 'image/jpeg')
     .attachTrackingEvent('creativeView', 'http://companionad.com/creativeView');
+  t.end();
+});
+
+test('validate mediafile settings', function(t) {
+  t.throws(function() {
+    var vastMediaFileTest = new VAST({ version : '2.0' });
+    var ad = vastMediaFileTest.attachAd({
+        id : 1
+      , structure : 'inline'
+      , AdTitle : 'Common name of the ad'
+      , AdSystem : { name: 'Test Ad Server', version : '1.0' }
+      }).attachImpression({ id : 23, url : 'http://impression.com' });
+    ad.attachCreative('Linear', {
+         AdParameters : '<xml></xml>'
+       , Duration : '00:00:30'
+     }).attachMediaFile('http://domain.com/file.ext', {})
+  }, 'It should throw an error if no id is set');
   t.end();
 });
 
