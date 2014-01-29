@@ -38,7 +38,7 @@ var xml = function(options) {
       var companionAdCreatives = ad.creatives.filter(function(c) { return c.type === 'CompanionAd' });
 
       linearCreatives.forEach(function(c) {
-        var creative = creatives.element('Creative')
+        var creative = creatives.element('Creative', c.attributes)
         var creativeType;
         creativeType = creative.element(c.type);
         if (c.icons.length > 0) var icons = creativeType.element('Icons');

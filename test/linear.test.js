@@ -72,7 +72,8 @@ test('attach survey', function(t){
 });
 
 var creative = ad.attachCreative('Linear', {
-    AdParameters : '<xml></xml>'
+    id: 99
+  , AdParameters : '<xml></xml>'
   , Duration : '00:00:30'
 })
 .attachMediaFile('http://domain.com/file.ext', { id: Date.now() })
@@ -83,6 +84,8 @@ test('attach creatives and events', function(t){
   t.ok(ad.creatives, 'It should have a `creatives` array');
 
   t.ok(creative, 'It should return creative when attaching a Linear creative');
+  t.ok(creative.attributes.id === 99, 'it should set creative@id attrs');
+  t.ok(/id=\"99\"/.test(vast.xml()), 'it renders creative id');
   t.equal(creative.Duration, '00:00:30', 'It should set a duration');
   t.throws(function(){ ad.attachLinearCreative() }, 'It should throw an error if no Duration is used');
   t.equal(creative.mediaFiles[0].url, 'http://domain.com/file.ext', 'It should set a media file URL');
