@@ -2,6 +2,7 @@ var builder = require('xmlbuilder')
   , Ad = require('./lib/ad');
 
 var xml = function(options) {
+  options = options || {};
   var track = (options.track === undefined) ? true : options.track;
   var response = builder.create('VAST', { version : '1.0', encoding : 'UTF-8' });
   response.att('version', this.version);

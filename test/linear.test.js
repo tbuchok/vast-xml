@@ -99,19 +99,25 @@ test('attach creatives and events', function(t){
 });
 
 test('validate mediafile settings', function(t) {
+  var vastMediaFileTest = new VAST({ version : '2.0' });
+  var ad = vastMediaFileTest.attachAd({
+      id : 1
+    , structure : 'inline'
+    , AdTitle : 'Common name of the ad'
+    , AdSystem : { name: 'Test Ad Server', version : '1.0' }
+    }).attachImpression({ id : 23, url : 'http://impression.com' });
   t.throws(function() {
-    var vastMediaFileTest = new VAST({ version : '2.0' });
-    var ad = vastMediaFileTest.attachAd({
-        id : 1
-      , structure : 'inline'
-      , AdTitle : 'Common name of the ad'
-      , AdSystem : { name: 'Test Ad Server', version : '1.0' }
-      }).attachImpression({ id : 23, url : 'http://impression.com' });
     ad.attachCreative('Linear', {
          AdParameters : '<xml></xml>'
        , Duration : '00:00:30'
      }).attachMediaFile('http://domain.com/file.ext', {})
-  }, 'It should throw an error if no id is set');
+  }, 'it should throw an error if no id is set');
+  ad.attachCreative('Linear', {
+       AdParameters : '<xml></xml>'
+     , Duration : '00:00:30'
+   }).attachMediaFile('http://domain.com/file.ext', { id: Date.now(), scalable: false })
+  t.ok(ad.creatives[1].mediaFiles[0].attributes.scalable === false, 'it should set false on scalabe');
+  t.ok(/scalable=\"false\"/.test(vastMediaFileTest.xml()), 'it properly casts `false` to string');
   t.end();
 });
 
