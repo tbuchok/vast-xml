@@ -151,6 +151,24 @@ vast.xml({ pretty : true, indent : '  ', newline : '\n' });
 </VAST>
 ```
 
+## VAST with no ads
+
+```javascript
+var VAST = require('vast-xml');
+
+var vast = new VAST({VASTErrorURI: 'http://adserver.com/noad.gif'});
+vast.xml({ pretty : true, indent : '  ', newline : '\n' });
+```
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<VAST version="3.0">
+  <Error>
+    <![CDATA[http://adserver.com/noad.gif]>
+  </Error>
+</VAST>
+```
+
 ## Validating
 
 `npm test` validates the test builds. The validation is done against the VAST .xsd file, [made available by the IAB](http://www.iab.net/vast).
