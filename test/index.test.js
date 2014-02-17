@@ -52,11 +52,15 @@ test('validates vast with top level error tag and no ads', function(t) {
  
  var error = xml.get('/VAST/Error'),
      ad = xml.get('/VAST/Ad');
+
  t.ok(error, 'It has Error element');
  t.notOk(ad, 'It has not Ad element');
  
- var result = xml.validate(xsd);
- t.notOk(result, 'It does not validate against the VAST .xsd (inconsistency between .xsd and documentation)');
+ // official vast 3.0 XSD does incorrectly does not validate a top-level error
+ // implementation can be found at: http://www.iab.net/media/file/VASTv3.0.pdf section 2.4.2.4
+
+ // var result = xml.validate(xsd); // => this is `notOk`
+ // t.notOk(result, 'It does not validate against the VAST .xsd (inconsistency between .xsd and documentation)');
  
  t.end();
 })

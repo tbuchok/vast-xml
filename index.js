@@ -6,6 +6,8 @@ var xml = function(options) {
   var track = (options.track === undefined) ? true : options.track;
   var response = builder.create('VAST', { version : '1.0', encoding : 'UTF-8' });
   response.att('version', this.version);
+  if (this.ads.length === 0 && this.VASTErrorURI)
+    return response.element('Error').cdata(this.VASTErrorURI).end(options);
   this.ads.forEach(function(ad){
     var adOptions = { id : ad.id }
     if (ad.sequence) adOptions.sequence = ad.sequence;
@@ -93,6 +95,7 @@ var xml = function(options) {
 function VAST(settings) {
   settings = settings || {};
   this.version = settings.version || '3.0';
+  this.VASTErrorURI = settings.VASTErrorURI;
   this.ads = [];
   this.attachAd = function(settings) {
     var ad = new Ad(settings);
