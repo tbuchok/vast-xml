@@ -46,8 +46,8 @@ test('omit tracking', function(t) {
 
 test('validates vast with error tag and no ads', function(t) {
  var response = vastError.xml({ pretty : true, indent: '  ', newline: '\n' });
- //TB: If desired, uncomment here and write file to disk for review:
- // fs.writeFileSync('./test/files/non-linear.xml', response);
+ // If desired, uncomment here and write file to disk for review:
+ // fs.writeFileSync('./test/files/empty-error.xml', response);
  xml = libxmljs.parseXmlString(response);
  var result = xml.validate(xsd);
  t.ok(result, 'It validates against the VAST .xsd');
