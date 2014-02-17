@@ -5,6 +5,7 @@
 var linear = require('./linear.test.js')
   , wrapper = require('./wrapper.test.js')
   , nonLinear = require('./non-linear.test.js')
+  , vastError = require('./vast-top-level-error.test.js')
   , xsd = libxmljs.parseXmlString(fs.readFileSync('./test/files/vast3_draft.xsd').toString());
 
 test('validates linear vast XML', function(t) {
@@ -42,3 +43,20 @@ test('omit tracking', function(t) {
  t.notOk(/Impression/.test(response), 'It should not include impressions');
  t.end();
 });
+
+test('validates vast with top level error tag and no ads', function(t) {
+ var response = vastError.xml({ pretty : true, indent: '  ', newline: '\n' });
+ // If desired, uncomment here and write file to disk for review:
+ // fs.writeFileSync('./test/files/empty-error.xml', response);
+ xml = libxmljs.parseXmlString(response);
+ 
+ var error = xml.get('/VAST/Error'),
+     ad = xml.get('/VAST/Ad');
+ t.ok(error, 'It has Error element');
+ t.notOk(ad, 'It has not Ad element');
+ 
+ var result = xml.validate(xsd);
+ t.notOk(result, 'It does not validate against the VAST .xsd (inconsistency between .xsd and documentation)');
+ 
+ t.end();
+})
