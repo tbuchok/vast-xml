@@ -11,7 +11,7 @@ var xml = function(options) {
   this.ads.forEach(function(ad){
     var adOptions = { id : ad.id }
     if (ad.sequence) adOptions.sequence = ad.sequence;
-    var Ad = response.element('Ad', { id : ad.id, sequence : ad.sequence });
+    var Ad = response.element('Ad', adOptions);
     if (ad.structure.toLowerCase() === 'wrapper') { 
       var wrapper = Ad.element('Wrapper');
       wrapper.element('AdSystem', ad.AdSystem.name, { version : ad.AdSystem.version });
