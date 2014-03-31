@@ -62,7 +62,7 @@ var xml = function(options) {
         });
         var mediaFiles = creativeType.element('MediaFiles');
         c.mediaFiles.forEach(function(mediaFile) {
-          mediaFiles.element('MediaFile', mediaFile.url, mediaFile.attributes);
+          mediaFiles.element('MediaFile', mediaFile.attributes).cdata(mediaFile.url);
         });
       });
 
