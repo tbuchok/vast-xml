@@ -24,12 +24,15 @@ var xml = function(options) {
       var inline = Ad.element('InLine');
       inline.element('AdSystem', ad.AdSystem.name, { version : ad.AdSystem.version });
       inline.element('AdTitle').cdata(ad.AdTitle);
-      inline.element('Description').cdata(ad.Description || '');
+      if (ad.Description)
+        inline.element('Description').cdata(ad.Description);
       ad.surveys.forEach(function(survey) {
         var attributes = {}
         if (survey.type) attributes.type = survey.type
-        inline.element('Survey', attributes).cdata(survey.url || '');
+        inline.element('Survey', attributes).cdata(survey.url);
       });
+      if (ad.Error)
+        inline.element('Error').cdata(ad.Error);
       ad.impressions.forEach(function(impression){
         if (track) inline.element('Impression', { id : impression.id }).cdata(impression.url);
       });

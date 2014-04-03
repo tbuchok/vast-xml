@@ -24,6 +24,7 @@ var ad = vast.attachAd({
   , structure : 'inline'
   , sequence : 99
   , AdTitle : 'Common name of the ad'
+  , Error: 'http://error.err'
   , AdSystem : { name: 'Test Ad Server', version : '1.0' }
 }).attachImpression({ id : 23, url : 'http://impression.com' });
 
