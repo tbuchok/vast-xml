@@ -23,12 +23,12 @@ var xml = function(options) {
     } else {
       var inline = Ad.element('InLine');
       inline.element('AdSystem', ad.AdSystem.name, { version : ad.AdSystem.version });
-      inline.element('AdTitle', ad.AdTitle);
-      inline.element('Description', ad.Description);
+      inline.element('AdTitle').cdata(ad.AdTitle);
+      inline.element('Description').cdata(ad.Description || '');
       ad.surveys.forEach(function(survey) {
         var attributes = {}
         if (survey.type) attributes.type = survey.type
-        inline.element('Survey', survey.url, attributes);
+        inline.element('Survey', attributes).cdata(survey.url || '');
       });
       ad.impressions.forEach(function(impression){
         if (track) inline.element('Impression', { id : impression.id }).cdata(impression.url);
