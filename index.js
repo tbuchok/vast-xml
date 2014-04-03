@@ -24,8 +24,7 @@ var xml = function(options) {
       var inline = Ad.element('InLine');
       inline.element('AdSystem', ad.AdSystem.name, { version : ad.AdSystem.version });
       inline.element('AdTitle').cdata(ad.AdTitle);
-      if (ad.Description)
-        inline.element('Description').cdata(ad.Description);
+      inline.element('Description').cdata(ad.Description || '');
       ad.surveys.forEach(function(survey) {
         var attributes = {}
         if (survey.type) attributes.type = survey.type
