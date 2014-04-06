@@ -12,6 +12,7 @@ var xml = function(options) {
     var adOptions = { id : ad.id }
     if (ad.sequence) adOptions.sequence = ad.sequence;
     var Ad = response.element('Ad', adOptions);
+    var creatives;
     if (ad.structure.toLowerCase() === 'wrapper') { 
       var wrapper = Ad.element('Wrapper');
       wrapper.element('AdSystem', ad.AdSystem.name, { version : ad.AdSystem.version });
@@ -19,7 +20,7 @@ var xml = function(options) {
       ad.impressions.forEach(function(impression) {
         if (track) wrapper.element('Impression').cdata(impression.url);
       });
-      wrapper.element('Creatives');
+      creatives = wrapper.element('Creatives');
     } else {
       var inline = Ad.element('InLine');
       inline.element('AdSystem', ad.AdSystem.name, { version : ad.AdSystem.version });
@@ -35,8 +36,8 @@ var xml = function(options) {
       ad.impressions.forEach(function(impression){
         if (track) inline.element('Impression', { id : impression.id }).cdata(impression.url);
       });
-      var creatives = inline.element('Creatives');
-
+      creatives = inline.element('Creatives');
+    }
       var linearCreatives = ad.creatives.filter(function(c) { return c.type === 'Linear' });
       var nonLinearCreatives = ad.creatives.filter(function(c) { return c.type === 'NonLinear' });
       var companionAdCreatives = ad.creatives.filter(function(c) { return c.type === 'CompanionAd' });
@@ -89,7 +90,6 @@ var xml = function(options) {
           if (r.adParameters) companion.element('AdParameters', r.adParameters.data, { xmlEncoded : r.adParameters.xmlEncoded });
         });
       });
-    }
   });
   return response.end(options);
 };
