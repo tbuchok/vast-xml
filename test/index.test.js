@@ -4,6 +4,7 @@
 
 var linear = require('./linear.test.js')
   , wrapper = require('./wrapper.test.js')
+  , wrapperWithCompanion = require('./wrapper-with-companion.test.js')
   , nonLinear = require('./non-linear.test.js')
   , vastError = require('./vast-top-level-error.test.js')
   , xsd = libxmljs.parseXmlString(fs.readFileSync('./test/files/vast3_draft.xsd').toString());
@@ -32,6 +33,17 @@ test('validates wrapper vast XML', function(t) {
   var response = wrapper.xml({ pretty : true, indent: '  ', newline: '\n' });
   // TB: If desired, uncomment here and write file to disk for review:
   // fs.writeFileSync('./test/files/wrapper.xml', response);
+  xml = libxmljs.parseXmlString(response);
+  var result = xml.validate(xsd);
+  t.ok(result, 'It validates against the VAST .xsd');
+  t.end();
+});
+
+test('validates wrapper with companion vast XML', function(t) {
+  var response = wrapperWithCompanion.xml({ pretty : true, indent: '  ', newline: '\n' });
+  // TB: If desired, uncomment here and write file to disk for review:
+  // fs.writeFileSync('./test/files/wrapper-with-companion.xml', response);
+  t.ok(response.match('StaticResource'), 'it ensures that companion ads are present');
   xml = libxmljs.parseXmlString(response);
   var result = xml.validate(xsd);
   t.ok(result, 'It validates against the VAST .xsd');
