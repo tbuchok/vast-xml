@@ -4,13 +4,13 @@
   <script type="text/javascript" src="/vast.min.js"></script>
   <script type="text/javascript">
     VAST('example')
-      .on('ready', function(video) {
-        
-      })
+      .on('init', function(vast) { console.log('init!')  })
+      .on('xmlLoaded', function(xml) { console.log('xml loaded!') })
     ;
+
   </script>
 </head>
 <body>
-  <video id = 'example'></video>
+  <video id = 'example' data-vast-tag-uri = "http://localhost:3000/linear.xml" />
 </body>
 </html>
