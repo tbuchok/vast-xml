@@ -45,7 +45,10 @@ var xml = function(options) {
       linearCreatives.forEach(function(c) {
         var creative = creatives.element('Creative', c.attributes)
         var creativeType;
-        creativeType = creative.element(c.type);
+        var creativeOpts = {};
+
+        if (c.skipoffset) creativeOpts.skipoffset = c.skipoffset;
+        creativeType = creative.element(c.type, creativeOpts);
         if (c.icons.length > 0) var icons = creativeType.element('Icons');
         c.icons.forEach(function(i){
           var icon = icons.element('Icon', i.attributes);
@@ -56,7 +59,11 @@ var xml = function(options) {
         creativeType.element('Duration', c.Duration);
         var trackingEvents = creativeType.element('TrackingEvents');
         c.trackingEvents.forEach(function(trackingEvent){
-          if (track) trackingEvents.element('Tracking', trackingEvent.url, { event : trackingEvent.event });
+          if (track) {
+            var attributes = { event : trackingEvent.event };
+            if (trackingEvent.offset) attributes.offset = trackingEvent.offset;
+            trackingEvents.element('Tracking', trackingEvent.url, attributes);
+          } 
         });
         if (c.AdParameters) creativeType.element('AdParameters').cdata(c.AdParameters);
         var videoClicks = creativeType.element('VideoClicks');
