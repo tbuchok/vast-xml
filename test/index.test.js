@@ -13,7 +13,7 @@ var linear = require('./linear.test.js')
 test('validates linear vast XML', function(t) {
   var response = linear.xml({ pretty : true, indent: '  ', newline: '\n' });
   // TB: If desired, uncomment here and write file to disk for review:
-  fs.writeFileSync('./test/files/linear.xml', response);
+  // fs.writeFileSync('./test/files/linear.xml', response);
   xml = libxmljs.parseXmlString(response);
   var result = xml.validate(xsd);
   t.ok(result, 'It validates against the VAST .xsd');
