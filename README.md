@@ -39,7 +39,6 @@ ad.attachImpression({
 ```javascript
 var creative = ad.attachCreative('Linear', {
     AdParameters : '<xml></xml>'
-  , skipoffset: '00:00:05'
   , Duration : '00:00:30'
 });
 creative.attachMediaFile('http://domain.com/file.ext', {
@@ -55,9 +54,22 @@ creative.attachMediaFile('http://domain.com/file.ext', {
   , apiFramework: "VPAID"
 });
 creative.attachTrackingEvent('creativeView', 'http://creativeview.com');
+creative.attachVideoClick('ClickThrough', 'http://click-through.com');
+```
+
+### Skippable Linear Creatives
+
+Create _skippable linear creative_ by adding a `skipoffset` attribute when attaching creative. Attach `skip` and/or `progress` tracking events. See below:
+
+```
+var creative = ad.attachCreative('Linear', {
+    AdParameters : '<xml></xml>'
+  , skipoffset: '00:00:05'
+  , Duration : '00:00:30'
+});
+// ...
 creative.attachTrackingEvent('skip', 'http://skipevent.com');
 creative.attachTrackingEvent('progress', 'http://zing-zang.com', '00:00:15.000');
-creative.attachVideoClick('ClickThrough', 'http://click-through.com');
 ```
 
 ### Attach Icons to Linear creatives
