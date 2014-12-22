@@ -3,6 +3,7 @@
   , libxmljs = require('libxmljs');
 
 var linear = require('./linear.test.js')
+  , skippableLinear = require('./skippable-linear.test.js')
   , wrapper = require('./wrapper.test.js')
   , wrapperWithCompanion = require('./wrapper-with-companion.test.js')
   , nonLinear = require('./non-linear.test.js')
@@ -18,6 +19,16 @@ test('validates linear vast XML', function(t) {
   t.ok(result, 'It validates against the VAST .xsd');
   t.end();
 });
+
+test('validates skippable linear vast XML', function(t) {
+  var response = skippableLinear.xml({ pretty : true, indent: '  ', newline: '\n' });
+  // TB: If desired, uncomment here and write file to disk for review:
+  //fs.writeFileSync('./test/files/skippable-linear.xml', response);
+  xml = libxmljs.parseXmlString(response);
+  var result = xml.validate(xsd);
+  t.ok(result, 'It validates against the VAST .xsd');
+  t.end();
+})
 
 test('validates non-linear vast xml', function(t){
   var response = nonLinear.xml({ pretty : true, indent: '  ', newline: '\n' });
@@ -75,4 +86,4 @@ test('validates vast with top level error tag and no ads', function(t) {
  // t.notOk(result, 'It does not validate against the VAST .xsd (inconsistency between .xsd and documentation)');
  
  t.end();
-})
+});
