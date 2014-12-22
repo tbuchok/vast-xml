@@ -43,7 +43,7 @@ var creative = ad.attachCreative('Linear', {
   , Duration : '00:00:30'
 });
 creative.attachMediaFile('http://domain.com/file.ext', {
-    type: "video/mp4'
+    type: "video/mp4"
   , bitrate: "320"
   , minBitrate: "320"
   , maxBitrate: "320"
