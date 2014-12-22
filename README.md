@@ -61,7 +61,7 @@ creative.attachVideoClick('ClickThrough', 'http://click-through.com');
 
 Create _skippable linear creative_ by adding a `skipoffset` attribute when attaching creative. Attach `skip` and/or `progress` tracking events. See below:
 
-```
+```javascript
 var creative = ad.attachCreative('Linear', {
     AdParameters : '<xml></xml>'
   , skipoffset: '00:00:05'
