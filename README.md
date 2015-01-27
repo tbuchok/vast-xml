@@ -16,6 +16,7 @@ var ad = vast.attachAd({
       id : 1
     , structure : 'inline'
     , sequence : 99
+    , Error: 'http://error-tracking.com'
     , AdTitle : 'Common name of the ad'
     , AdSystem : { name: 'Test Ad Server', version : '1.0' }
   });
