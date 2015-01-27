@@ -20,6 +20,8 @@ var xml = function(options) {
       ad.impressions.forEach(function(impression) {
         if (track) wrapper.element('Impression').cdata(impression.url);
       });
+      if (ad.Error)
+        wrapper.element('Error').cdata(ad.Error);
       creatives = wrapper.element('Creatives');
     } else {
       var inline = Ad.element('InLine');

@@ -25,6 +25,7 @@ vast.attachAd({
     structure : 'wrapper'
   , AdSystem : 'Common name of the ad'
   , sequence : 23
+  , Error: 'http://error.err'
   , VASTAdTagURI : 'http://example.com'
 }).attachImpression({ id: Date.now(), url : 'http://impression.com' });
 
