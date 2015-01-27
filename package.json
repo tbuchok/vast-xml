@@ -1,6 +1,6 @@
 {
   "name": "vast-xml",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "VAST XML responses for online video advertisers.",
   "main": "index.js",
   "dependencies": {
