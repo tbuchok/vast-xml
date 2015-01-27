@@ -17,6 +17,8 @@ var xml = function(options) {
       var wrapper = Ad.element('Wrapper');
       wrapper.element('AdSystem', ad.AdSystem.name, { version : ad.AdSystem.version });
       wrapper.element('VASTAdTagURI', ad.VASTAdTagURI);
+      if (ad.Error)
+        wrapper.element('Error').cdata(ad.Error);
       ad.impressions.forEach(function(impression) {
         if (track) wrapper.element('Impression').cdata(impression.url);
       });
