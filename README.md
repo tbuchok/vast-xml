@@ -16,6 +16,7 @@ var ad = vast.attachAd({
       id : 1
     , structure : 'inline'
     , sequence : 99
+    , Error: 'http://error.err'
     , AdTitle : 'Common name of the ad'
     , AdSystem : { name: 'Test Ad Server', version : '1.0' }
   });
@@ -133,6 +134,7 @@ vast.xml({ pretty : true, indent : '  ', newline : '\n' });
       <AdTitle>Common name of the ad</AdTitle>
       <Description/>
       <Survey/>
+      <Error><![CDATA[http://error.err]]></Error>
       <Impression id="23">http://impression.com</Impression>
       <Impression id="sample-server">http://sample-impression.com</Impression>
       <Creatives>
