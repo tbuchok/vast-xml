@@ -99,6 +99,12 @@ var xml = function(options) {
           if (r.adParameters) companion.element('AdParameters', r.adParameters.data, { xmlEncoded : r.adParameters.xmlEncoded });
         });
       });
+    if (ad.Extensions) {
+      var extensions = inline.element('Extensions');
+      [].concat(ad.Extensions).forEach(function(extension) {
+        extensions.element('Extension').raw(extension);
+      });
+    }
   });
   return response.end(options);
 };
