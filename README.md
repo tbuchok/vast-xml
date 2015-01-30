@@ -22,6 +22,23 @@ var ad = vast.attachAd({
   });
 ```
 
+### Ad extensions
+
+```javascript
+var VAST = require('vast-xml');
+
+var vast = new VAST();
+var ad = vast.attachAd({ 
+      id : 1
+    , structure : 'inline'
+    , sequence : 99
+    , Error: 'http://error.err'
+    , Extensions: ['<xml>data</xml>'] // accepts an array or string of XML, warning: XML is not validated by this library!
+    , AdTitle : 'Common name of the ad'
+    , AdSystem : { name: 'Test Ad Server', version : '1.0' }
+  });
+```
+
 ## Attach Impression tracking URLs
 
 ```javascript
