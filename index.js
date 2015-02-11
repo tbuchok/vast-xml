@@ -15,7 +15,7 @@ var xml = function(options) {
     var creatives;
     if (ad.structure.toLowerCase() === 'wrapper') { 
       var wrapper = Ad.element('Wrapper');
-      wrapper.element('AdSystem', ad.AdSystem.name, { version : ad.AdSystem.version });
+      wrapper.element('AdSystem', { version : ad.AdSystem.version }).cdata(ad.AdSystem.name || '');
       wrapper.element('VASTAdTagURI').cdata(ad.VASTAdTagURI);
       if (ad.Error)
         wrapper.element('Error').cdata(ad.Error);
@@ -25,7 +25,7 @@ var xml = function(options) {
       creatives = wrapper.element('Creatives');
     } else {
       var inline = Ad.element('InLine');
-      inline.element('AdSystem', ad.AdSystem.name, { version : ad.AdSystem.version });
+      inline.element('AdSystem', { version : ad.AdSystem.version }).cdata(ad.AdSystem.name || '');
       inline.element('AdTitle').cdata(ad.AdTitle);
       inline.element('Description').cdata(ad.Description || '');
       ad.surveys.forEach(function(survey) {
@@ -58,19 +58,19 @@ var xml = function(options) {
             icon.element(r.type, r.uri, (r.creativeType) ? { creativeType : r.creativeType } : {});
           });
         });
-        creativeType.element('Duration', c.Duration);
+        creativeType.element('Duration').cdata(c.Duration);
         var trackingEvents = creativeType.element('TrackingEvents');
         c.trackingEvents.forEach(function(trackingEvent){
           if (track) {
             var attributes = { event : trackingEvent.event };
             if (trackingEvent.offset) attributes.offset = trackingEvent.offset;
-            trackingEvents.element('Tracking', trackingEvent.url, attributes);
+            trackingEvents.element('Tracking', attributes).cdata(trackingEvent.url);
           } 
         });
         if (c.AdParameters) creativeType.element('AdParameters').cdata(c.AdParameters);
         var videoClicks = creativeType.element('VideoClicks');
         c.videoClicks.forEach(function(videoClick){
-          videoClicks.element(videoClick.type, videoClick.url, { id : videoClick.id });
+          videoClicks.element(videoClick.type, { id : videoClick.id }).cdata(videoClick.url);
         });
         var mediaFiles = creativeType.element('MediaFiles');
         c.mediaFiles.forEach(function(mediaFile) {
@@ -84,19 +84,19 @@ var xml = function(options) {
         c.resources.forEach(function(resource) { 
           var attributes = {}
           if (resource.creativeType) attributes.creativeType = resource.creativeType;
-          creativeType.element(resource.type, resource.uri, attributes);
+          creativeType.element(resource.type, attributes).cdata(resource.uri);
         });
         c.clicks.forEach(function(click){
-          creativeType.element(click.type, click.uri);
+          creativeType.element(click.type).cdata(click.uri);
         });
-        if (c.adParameters) creativeType.element('AdParameters', c.adParameters.data, { xmlEncoded : c.adParameters.xmlEncoded });
+        if (c.adParameters) creativeType.element('AdParameters', { xmlEncoded : c.adParameters.xmlEncoded }).cdata(c.adParameters.data);
       });
       if (companionAdCreatives.length > 0) var companionAds = creatives.element('Creative').element('CompanionAds');
       companionAdCreatives.forEach(function(c) {
         companion = companionAds.element('Companion', c.attributes);
         c.resources.forEach(function(r) { 
-          companion.element(r.type, r.uri, (r.creativeType) ? { creativeType : r.creativeType } : {});
-          if (r.adParameters) companion.element('AdParameters', r.adParameters.data, { xmlEncoded : r.adParameters.xmlEncoded });
+          companion.element(r.type, (r.creativeType) ? { creativeType : r.creativeType } : {}).cdata(r.uri);
+          if (r.adParameters) companion.element('AdParameters', { xmlEncoded : r.adParameters.xmlEncoded }).cdata(r.adParameters.data);
         });
       });
     if (ad.Extensions) {
