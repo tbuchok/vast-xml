@@ -27,7 +27,9 @@ var ad = vast.attachAd({
   , Error: 'http://error.err'
   , AdSystem : { name: 'Test Ad Server', version : '1.0' }
   , Extensions: ['<one><![CDATA[1]]></one>', '<two><dos id = "2" /></two>']
-}).attachImpression({ id : 23, url : 'http://impression.com' });
+}).attachImpression({ id : 23, url : 'http://impression.com' })
+  .attachImpression({ id: 99, url: 'https://thegreatone.com' })
+;
 
 test('`VAST` object', function(t){
   t.ok(vast, 'It should construct VAST responses');
