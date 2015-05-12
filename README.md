@@ -127,13 +127,10 @@ var creative = ad.attachCreative('NonLinear', {
 ## Attach Companion Ad creatives
 
 ```javascript
-var creative = ad.attachCreative('CompanionAd', { 
-    width : 300
-  , height : 250
-  , type : 'image/jpeg'
-  , url : 'http://companionad.com/image.jpg' 
-});
-creative.attachTrackingEvent('creativeView', 'http://companionad.com/creativeView');
+var creative = ad.attachCreative('CompanionAd', { width : 300 , height : 250 })
+    .attachResource('StaticResource', 'http://companionad.com/image.jpg', 'image/jpeg')
+    .attachTrackingEvent('creativeView', 'http://companionad.com/creativeView')
+;
 ```
 
 ## Generate XML
