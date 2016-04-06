@@ -55,7 +55,7 @@ var xml = function(options) {
         c.icons.forEach(function(i){
           var icon = icons.element('Icon', i.attributes);
           i.resources.forEach(function(r){
-            icon.element(r.type, r.uri, (r.creativeType) ? { creativeType : r.creativeType } : {});
+            icon.element(r.type, (r.creativeType) ? { creativeType : r.creativeType } : {}).cdata(r.uri);
           });
         });
         creativeType.element('Duration', c.Duration);
@@ -64,13 +64,13 @@ var xml = function(options) {
           if (track) {
             var attributes = { event : trackingEvent.event };
             if (trackingEvent.offset) attributes.offset = trackingEvent.offset;
-            trackingEvents.element('Tracking', trackingEvent.url, attributes);
+            trackingEvents.element('Tracking', attributes).cdata(trackingEvent.url);
           } 
         });
         if (c.AdParameters) creativeType.element('AdParameters').cdata(c.AdParameters);
         var videoClicks = creativeType.element('VideoClicks');
         c.videoClicks.forEach(function(videoClick){
-          videoClicks.element(videoClick.type, videoClick.url, { id : videoClick.id });
+          videoClicks.element(videoClick.type, videoClick.attributes).cdata(videoClick.url);
         });
         var mediaFiles = creativeType.element('MediaFiles');
         c.mediaFiles.forEach(function(mediaFile) {
@@ -84,10 +84,10 @@ var xml = function(options) {
         c.resources.forEach(function(resource) { 
           var attributes = {}
           if (resource.creativeType) attributes.creativeType = resource.creativeType;
-          creativeType.element(resource.type, resource.uri, attributes);
+          creativeType.element(resource.type, resource.attributes).cdata(resource.uri);
         });
         c.clicks.forEach(function(click){
-          creativeType.element(click.type, click.uri);
+          creativeType.element(click.type, click.attributes).cdata(click.uri);
         });
         if (c.adParameters) creativeType.element('AdParameters', c.adParameters.data, { xmlEncoded : c.adParameters.xmlEncoded });
       });
@@ -95,7 +95,7 @@ var xml = function(options) {
       companionAdCreatives.forEach(function(c) {
         companion = companionAds.element('Companion', c.attributes);
         c.resources.forEach(function(r) { 
-          companion.element(r.type, r.uri, (r.creativeType) ? { creativeType : r.creativeType } : {});
+          companion.element(r.type, (r.creativeType) ? { creativeType : r.creativeType } : {}).cdata(r.uri);
           if (r.adParameters) companion.element('AdParameters', r.adParameters.data, { xmlEncoded : r.adParameters.xmlEncoded });
         });
       });
