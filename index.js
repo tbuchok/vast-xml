@@ -84,7 +84,7 @@ var xml = function(options) {
         c.resources.forEach(function(resource) { 
           var attributes = {}
           if (resource.creativeType) attributes.creativeType = resource.creativeType;
-          creativeType.element(resource.type, resource.attributes).cdata(resource.uri);
+          creativeType.element(resource.type, attributes).cdata(resource.uri);
         });
         c.clicks.forEach(function(click){
           creativeType.element(click.type, click.attributes).cdata(click.uri);
