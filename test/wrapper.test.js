@@ -1,6 +1,8 @@
 var test = require('tap').test
   , VAST = require('../index.js')
-  , vast = new VAST();
+  , vast = new VAST()
+  , ad
+  , creative;
 
 test('Validate ad settings', function(t){
   t.throws(function(){
@@ -21,12 +23,14 @@ test('Validate ad settings', function(t){
   t.end();
 });
 
-vast.attachAd({ 
+ad = vast.attachAd({
     structure : 'wrapper'
   , AdSystem : 'Common name of the ad'
   , sequence : 23
   , Error: 'http://error.err'
   , VASTAdTagURI : 'http://example.com'
 }).attachImpression({ id: Date.now(), url : 'http://impression.com' });
+
+creative = ad.attachCreative('Linear', { Wrapper : true } )
 
 module.exports = vast;

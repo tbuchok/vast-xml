@@ -58,7 +58,7 @@ var xml = function(options) {
             icon.element(r.type, r.uri, (r.creativeType) ? { creativeType : r.creativeType } : {});
           });
         });
-        creativeType.element('Duration', c.Duration);
+        if (c.Duration) creativeType.element('Duration', c.Duration);
         var trackingEvents = creativeType.element('TrackingEvents');
         c.trackingEvents.forEach(function(trackingEvent){
           if (track) {
@@ -72,10 +72,12 @@ var xml = function(options) {
         c.videoClicks.forEach(function(videoClick){
           videoClicks.element(videoClick.type, videoClick.url, { id : videoClick.id });
         });
-        var mediaFiles = creativeType.element('MediaFiles');
-        c.mediaFiles.forEach(function(mediaFile) {
-          mediaFiles.element('MediaFile', mediaFile.attributes).cdata(mediaFile.url);
-        });
+        if (c.mediaFiles && c.mediaFiles.length > 0) {
+          var mediaFiles = creativeType.element('MediaFiles');
+          c.mediaFiles.forEach(function(mediaFile) {
+            mediaFiles.element('MediaFile', mediaFile.attributes).cdata(mediaFile.url);
+          });
+        }
       });
 
       nonLinearCreatives.forEach(function(c){
