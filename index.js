@@ -98,6 +98,13 @@ var xml = function(options) {
           if (r.adParameters) companion.element('AdParameters', r.adParameters.data, { xmlEncoded : r.adParameters.xmlEncoded });
         });
       });
+      if (ad.Extensions) {
+        var extensions;
+        if(inline != void 0) extensions = inline.element('Extensions');
+        if(wrapper != void 0) extensions = wrapper.element('Extensions');
+        [].concat(ad.Extensions).forEach(function(extension) {
+          extensions.element('Extension').cdata(extension);
+        });
   });
   return response.end(options);
 };
