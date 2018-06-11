@@ -17,6 +17,8 @@ var xml = function(options) {
       var wrapper = Ad.element('Wrapper');
       wrapper.element('AdSystem', ad.AdSystem.name, { version : ad.AdSystem.version });
       wrapper.element('VASTAdTagURI').cdata(ad.VASTAdTagURI); // AdTagURI should be cdata'd 
+      if(ad.Error)
+          wrapper.element('Error').cdata(ad.Error); // include error element for wrappers
       wrapper.element('AdTitle').cdata(ad.AdTitle);
       ad.impressions.forEach(function(impression) {
         if (track) wrapper.element('Impression').cdata(impression.url);
@@ -57,7 +59,7 @@ var xml = function(options) {
             icon.element(r.type, r.uri, (r.creativeType) ? { creativeType : r.creativeType } : {});
           });
         });
-        creativeType.element('Duration', c.Duration);
+        creativeType.element('Duration').cdata(c.Duration);
         var trackingEvents = creativeType.element('TrackingEvents');
         c.trackingEvents.forEach(function(trackingEvent){
           if (track) {
@@ -69,7 +71,7 @@ var xml = function(options) {
         if (c.AdParameters) creativeType.element('AdParameters').cdata(c.AdParameters);
         var videoClicks = creativeType.element('VideoClicks');
         c.videoClicks.forEach(function(videoClick){
-          videoClicks.element(videoClick.type, videoClick.url, { id : videoClick.id });
+          videoClicks.element('ClickThrough', videoClick.attributes).cdata(videoClick.url)
         });
         var mediaFiles = creativeType.element('MediaFiles');
         c.mediaFiles.forEach(function(mediaFile) {
