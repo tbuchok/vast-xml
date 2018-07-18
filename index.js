@@ -16,10 +16,9 @@ var xml = function(options) {
     if (ad.structure.toLowerCase() === 'wrapper') { 
       var wrapper = Ad.element('Wrapper');
       wrapper.element('AdSystem', ad.AdSystem.name, { version : ad.AdSystem.version });
-      wrapper.element('VASTAdTagURI').cdata(ad.VASTAdTagURI); // AdTagURI should be cdata'd 
-      if(ad.Error)
-          wrapper.element('Error').cdata(ad.Error); // include error element for wrappers
-      wrapper.element('AdTitle').cdata(ad.AdTitle);
+      wrapper.element('VASTAdTagURI').cdata(ad.VASTAdTagURI);
+      if (ad.Error)
+        wrapper.element('Error').cdata(ad.Error);
       ad.impressions.forEach(function(impression) {
         if (track) wrapper.element('Impression').cdata(impression.url);
       });
@@ -59,6 +58,7 @@ var xml = function(options) {
             icon.element(r.type, r.uri, (r.creativeType) ? { creativeType : r.creativeType } : {});
           });
         });
+        //creativeType.element('Duration', c.Duration);
         creativeType.element('Duration').cdata(c.Duration);
         var trackingEvents = creativeType.element('TrackingEvents');
         c.trackingEvents.forEach(function(trackingEvent){
@@ -100,13 +100,41 @@ var xml = function(options) {
           if (r.adParameters) companion.element('AdParameters', r.adParameters.data, { xmlEncoded : r.adParameters.xmlEncoded });
         });
       });
-      if (ad.Extensions) {
-        var extensions;
-        if(inline != void 0) extensions = inline.element('Extensions');
-        if(wrapper != void 0) extensions = wrapper.element('Extensions');
-        [].concat(ad.Extensions).forEach(function(extension) {
-          extensions.element('Extension').cdata(extension);
-        });
+    if (ad.Extensions) {
+      var extensions;
+      if(inline != void 0) extensions = inline.element('Extensions');
+      if(wrapper != void 0) extensions = wrapper.element('Extensions');
+      [].concat(ad.Extensions).forEach(function(extension) {
+        extensions.element('Extension', {type: 'AdVerifications'}).raw(extension);
+      });
+    }
+
+    if (ad.AdVerifications){
+      // VAST 4.1 necessary
+      var adVerifications;
+      if(wrapper != void 0) adVerifications = wrapper.element('AdVerifications');
+
+      [].concat(ad.AdVerifications).forEach(function(currentVerifiction){
+        
+        var ad_verifications = adVerifications.element('Verification', {vendor: currentVerifiction.vendor});
+
+          [].concat(currentVerifiction).forEach(function(verif) {
+            // browserOptional -> true would signify that it's our native script -> e.g. to run in iOS' JSContext
+            // false meaning that the resource needs a true JS environment 
+            ad_verifications.element('JavaScriptResource', {browserOptional: verif.JavaScriptResource.browserOptional}).cdata(verif.JavaScriptResource.resourceUrl);
+
+            if(verif.trackingEvents) {
+              var trackElementsNode = ad_verifications.element('TrackingEvents');
+              var currentTrackingEvent = verif.trackingEvents;
+              [].concat(currentTrackingEvent).forEach(function(currentTrackingEvent){
+                trackElementsNode.element('Tracking', {event: currentTrackingEvent.event}).cdata(currentTrackingEvent.url);
+              });
+            } 
+            ad_verifications.element('VerificationParameters').cdata(verif.VerificationParameters);
+          }); // end of concat each Verification Node
+      });
+    } 
+
   });
   return response.end(options);
 };
