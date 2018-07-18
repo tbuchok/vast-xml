@@ -16,8 +16,46 @@ var ad = vast.attachAd({
       id : 1
     , structure : 'inline'
     , sequence : 99
+    , Error: 'http://error.err'
     , AdTitle : 'Common name of the ad'
     , AdSystem : { name: 'Test Ad Server', version : '1.0' }
+  });
+```
+
+### Ad extensions
+
+```javascript
+var VAST = require('vast-xml');
+
+var vast = new VAST();
+var ad = vast.attachAd({ 
+      id : 1
+    , structure : 'inline'
+    , sequence : 99
+    , Error: 'http://error.err'
+    , Extensions: ['<xml>data</xml>'] // accepts an array or string of XML, warning: XML is not validated by this library!
+    , AdTitle : 'Common name of the ad'
+    , AdSystem : { name: 'Test Ad Server', version : '1.0' }
+  });
+```
+
+### AdVerifications (VAST 4.1)
+
+```javascript
+var VAST = require('vast-xml');
+
+var vast = new VAST({version: '4.1'});
+var ad = vast.attachAd({
+    id : 'AdVerificationsExample'
+    , structure : 'wrapper'
+    , AdSystem : { name : '2.0', version : '2.0' }
+    , Error : 'https://error.url.com/path/p?error=true'
+    , AdVerifications: [{ vendor: 'thirdPartyVendor-com.omid'
+              ,  JavaScriptResource: { browserOptional: 'false', resourceUrl: 'https://path.to/adVerification/script.js'}
+              ,  trackingEvents: [{ event:'verificationNotExecuted', url: 'https://error.url.com/p?event=verificationNotExecuted?' }, {event:'secondEvent', url: 'https://second.url/p?secondEvent=true' }] 
+              ,  VerificationParameters: 'Parameter=one&Parameter=two'
+            }]
+    , VASTAdTagURI : 'https://path.to.original/vast.xml'
   });
 ```
 
@@ -133,6 +171,7 @@ vast.xml({ pretty : true, indent : '  ', newline : '\n' });
       <AdTitle>Common name of the ad</AdTitle>
       <Description/>
       <Survey/>
+      <Error><![CDATA[http://error.err]]></Error>
       <Impression id="23">http://impression.com</Impression>
       <Impression id="sample-server">http://sample-impression.com</Impression>
       <Creatives>
