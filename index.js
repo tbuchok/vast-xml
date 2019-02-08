@@ -16,7 +16,9 @@ var xml = function(options) {
     if (ad.structure.toLowerCase() === 'wrapper') { 
       var wrapper = Ad.element('Wrapper');
       wrapper.element('AdSystem', ad.AdSystem.name, { version : ad.AdSystem.version });
-      wrapper.element('VASTAdTagURI', ad.VASTAdTagURI);
+      wrapper.element('VASTAdTagURI').cdata(ad.VASTAdTagURI);
+      if (ad.Error)
+        wrapper.element('Error').cdata(ad.Error);
       ad.impressions.forEach(function(impression) {
         if (track) wrapper.element('Impression').cdata(impression.url);
       });
@@ -45,7 +47,10 @@ var xml = function(options) {
       linearCreatives.forEach(function(c) {
         var creative = creatives.element('Creative', c.attributes)
         var creativeType;
-        creativeType = creative.element(c.type);
+        var creativeOpts = {};
+
+        if (c.skipoffset) creativeOpts.skipoffset = c.skipoffset;
+        creativeType = creative.element(c.type, creativeOpts);
         if (c.icons.length > 0) var icons = creativeType.element('Icons');
         c.icons.forEach(function(i){
           var icon = icons.element('Icon', i.attributes);
@@ -65,7 +70,11 @@ var xml = function(options) {
         creativeType.element('Duration', c.Duration);
         var trackingEvents = creativeType.element('TrackingEvents');
         c.trackingEvents.forEach(function(trackingEvent){
-          if (track) trackingEvents.element('Tracking', trackingEvent.url, { event : trackingEvent.event });
+          if (track) {
+            var attributes = { event : trackingEvent.event };
+            if (trackingEvent.offset) attributes.offset = trackingEvent.offset;
+            trackingEvents.element('Tracking', trackingEvent.url, attributes);
+          } 
         });
         if (c.AdParameters) creativeType.element('AdParameters').cdata(c.AdParameters);
         var videoClicks = creativeType.element('VideoClicks');
@@ -99,6 +108,12 @@ var xml = function(options) {
           if (r.adParameters) companion.element('AdParameters', r.adParameters.data, { xmlEncoded : r.adParameters.xmlEncoded });
         });
       });
+    if (ad.Extensions) {
+      var extensions = inline.element('Extensions');
+      [].concat(ad.Extensions).forEach(function(extension) {
+        extensions.element('Extension').raw(extension);
+      });
+    }
   });
   return response.end(options);
 };

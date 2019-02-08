@@ -16,6 +16,24 @@ var ad = vast.attachAd({
       id : 1
     , structure : 'inline'
     , sequence : 99
+    , Error: 'http://error.err'
+    , AdTitle : 'Common name of the ad'
+    , AdSystem : { name: 'Test Ad Server', version : '1.0' }
+  });
+```
+
+### Ad extensions
+
+```javascript
+var VAST = require('vast-xml');
+
+var vast = new VAST();
+var ad = vast.attachAd({ 
+      id : 1
+    , structure : 'inline'
+    , sequence : 99
+    , Error: 'http://error.err'
+    , Extensions: ['<xml>data</xml>'] // accepts an array or string of XML, warning: XML is not validated by this library!
     , AdTitle : 'Common name of the ad'
     , AdSystem : { name: 'Test Ad Server', version : '1.0' }
   });
@@ -42,7 +60,7 @@ var creative = ad.attachCreative('Linear', {
   , Duration : '00:00:30'
 });
 creative.attachMediaFile('http://domain.com/file.ext', {
-    type: "video/mp4'
+    type: "video/mp4"
   , bitrate: "320"
   , minBitrate: "320"
   , maxBitrate: "320"
@@ -55,6 +73,21 @@ creative.attachMediaFile('http://domain.com/file.ext', {
 });
 creative.attachTrackingEvent('creativeView', 'http://creativeview.com');
 creative.attachVideoClick('ClickThrough', 'http://click-through.com');
+```
+
+### Skippable Linear Creatives
+
+Create _skippable linear creative_ by adding a `skipoffset` attribute when attaching creative. Attach `skip` and/or `progress` tracking events. See below:
+
+```javascript
+var creative = ad.attachCreative('Linear', {
+    AdParameters : '<xml></xml>'
+  , skipoffset: '00:00:05'
+  , Duration : '00:00:30'
+});
+// ...
+creative.attachTrackingEvent('skip', 'http://skipevent.com');
+creative.attachTrackingEvent('progress', 'http://zing-zang.com', '00:00:15.000');
 ```
 
 ### Attach Icons to Linear creatives
@@ -94,13 +127,10 @@ var creative = ad.attachCreative('NonLinear', {
 ## Attach Companion Ad creatives
 
 ```javascript
-var creative = ad.attachCreative('CompanionAd', { 
-    width : 300
-  , height : 250
-  , type : 'image/jpeg'
-  , url : 'http://companionad.com/image.jpg' 
-});
-creative.attachTrackingEvent('creativeView', 'http://companionad.com/creativeView');
+var creative = ad.attachCreative('CompanionAd', { width : 300 , height : 250 })
+    .attachResource('StaticResource', 'http://companionad.com/image.jpg', 'image/jpeg')
+    .attachTrackingEvent('creativeView', 'http://companionad.com/creativeView')
+;
 ```
 
 ## Generate XML
@@ -118,6 +148,7 @@ vast.xml({ pretty : true, indent : '  ', newline : '\n' });
       <AdTitle>Common name of the ad</AdTitle>
       <Description/>
       <Survey/>
+      <Error><![CDATA[http://error.err]]></Error>
       <Impression id="23">http://impression.com</Impression>
       <Impression id="sample-server">http://sample-impression.com</Impression>
       <Creatives>
