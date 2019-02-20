@@ -57,6 +57,15 @@ var xml = function(options) {
           i.resources.forEach(function(r){
             icon.element(r.type, r.uri, (r.creativeType) ? { creativeType : r.creativeType } : {});
           });
+
+          if (i.clicks.length > 0) var clicks = icon.element('IconClicks');
+          i.clicks.forEach(function(c){
+            clicks.element(c.type).cdata(c.uri);
+          });
+
+          i.trackingEvents.forEach(function(t){
+            icon.element(t.type).cdata(t.uri);
+          });
         });
         creativeType.element('Duration', c.Duration);
         var trackingEvents = creativeType.element('TrackingEvents');
@@ -99,12 +108,13 @@ var xml = function(options) {
           if (r.adParameters) companion.element('AdParameters', r.adParameters.data, { xmlEncoded : r.adParameters.xmlEncoded });
         });
       });
-    if (ad.Extensions) {
-      var extensions = inline.element('Extensions');
-      [].concat(ad.Extensions).forEach(function(extension) {
-        extensions.element('Extension').raw(extension);
-      });
-    }
+      if (ad.Extensions) {
+        var parentElement = ad.structure === 'wrapper' ? wrapper : inline;
+        var extensions = parentElement.element('Extensions');
+        [].concat(ad.Extensions).forEach(function (extension) {
+          extensions.element('Extension').raw(extension);
+        });
+      }
   });
   return response.end(options);
 };

@@ -154,7 +154,7 @@ test('attach icons and icon stuff', function(t){
   icon.attachClick('IconClickThrough', 'http://icon-click-through.com');
   t.equal(icon.clicks[0].uri, 'http://icon-click-through.com', 'It should set icon clicks');
   icon.attachTrackingEvent('IconViewTracking', 'http://icon-view-tracking.com');
-  t.equal(icon.trackingEvents[0].uri, 'http://icon-view-tracking.com', 'It should set icon clicks');
+  t.equal(icon.trackingEvents[0].uri, 'http://icon-view-tracking.com', 'It should set icon view tracking');
 
   t.end();
 });
